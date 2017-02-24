@@ -7,7 +7,7 @@ public class ServerThread extends Thread {
   protected DatagramSocket socket;
   protected boolean open = true;
 
-  private static final int PORT = 8080;
+  private static final int PORT = 8082;
   private static final int BUFFER_SIZE = 256;
 
   public ServerThread() throws IOException {
@@ -35,18 +35,14 @@ public class ServerThread extends Thread {
         System.out.println("Request: " + requestString);
 
         // figure out reply
-        String reply = "hello";
-        /*if (requestString.equals("hello")) {
+        String reply;
+        if (requestString.equals("hello")) {
           reply = "ola";
         } else if (requestString.equals("goodbye")) {
           reply = "adeus";
           open = false;
         } else {
           reply = "unknown request";
-        }*/
-        if (requestString.matches("REGISTER (\d|[A-Z]){2}(-(\d|[A-Z]){2}){2} ([a-zA-Z])+")) {
-          //System.out.println("Plate Number: " + requestString.substring(9));
-          reply = requestString.substring(9);
         }
 
         System.out.println("Reply: " + reply);

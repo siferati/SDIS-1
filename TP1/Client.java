@@ -37,7 +37,6 @@ public class Client {
     socket.receive(packet);
 
     // display response
-    //String reply = packet.getData().toString();
     String reply = new String(packet.getData(), 0, packet.getLength());
     System.out.println("Server reply: " + reply);
 
