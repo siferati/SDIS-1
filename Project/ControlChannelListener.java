@@ -19,7 +19,7 @@ public class ControlChannelListener implements Runnable {
 
   public ControlChannelListener() throws IOException {
 
-    // open socket
+    // allow communication
     open = true;
 
     // get a multicast socket
@@ -27,6 +27,9 @@ public class ControlChannelListener implements Runnable {
 
     //get group address
     groupAddress = InetAddress.getByName(GROUP_ADDRESS);
+
+    // join multicast group
+    socket.joinGroup(groupAddress);
   }
 
   @Override
@@ -48,6 +51,16 @@ public class ControlChannelListener implements Runnable {
       // get received string
       String received = new String(packet.getData(), 0, packet.getLength());
       System.out.println("Received: " + received);
+
+      try {
+        Thread.sleep(1000);
+
+        // send a message to the channel
+        new Thread(new ControlChannelMessenger(received)).start();
+      }
+      catch (Exception e) {
+        // ...
+      }
     }
 
     // end communications
