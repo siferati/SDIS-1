@@ -7,9 +7,14 @@ import java.util.*;
 */
 public class ControlChannelListener extends ChannelListener {
 
-  public ControlChannelListener() {
+  // #define
+  private static final String CHANNEL_NAME = "(MC) Control Channel";
+  private static final int PORT = 8081;
+  private static final String GROUP_ADDRESS = "230.0.0.1";
+  private static final int BUFFER_SIZE = 256;
 
-    super("(MC) Control Channel", 8081, "230.0.0.1", 256);
+  public ControlChannelListener() {
+    super(CHANNEL_NAME, PORT, GROUP_ADDRESS, BUFFER_SIZE);
   }
 
   @Override

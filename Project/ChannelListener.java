@@ -2,85 +2,92 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/**
+* Peer thread to listen to a multicast channel
+*/
 public abstract class ChannelListener implements Runnable {
 
-   protected final int PORT;
-   protected final String GROUP_ADDRESS;
-   protected final int BUFFER_SIZE;
-   protected final String CHANNEL_NAME;
+  // attrs obtained from subclasses
+  protected String channelName;
+  protected int port;
 
-   protected boolean open;
-   protected MulticastSocket socket;
-   protected InetAddress groupInetAddress;
+  protected String groupAddress;
+  protected int bufferSize;
 
-   public ChannelListener(String channelName, int port, String groupAddress, int bufferSize) {
+  // common attrs
+  protected boolean open;
+  protected MulticastSocket socket;
+  protected InetAddress groupInetAddress;
 
-     this.PORT = port;
-     this.GROUP_ADDRESS = groupAddress;
-     this.BUFFER_SIZE = bufferSize;
-     this.CHANNEL_NAME = channelName;
+  public ChannelListener(String channelName, int port, String groupAddress, int bufferSize) {
 
-     // allow communication
-     open = true;
+    this.channelName = channelName;
+    this.port = port;
+    this.groupAddress = groupAddress;
+    this.bufferSize = bufferSize;
 
-     try {
-       // get a multicast socket
-       socket = new MulticastSocket(PORT);
-     }
-     catch (IOException e) {
-       System.out.println(CHANNEL_NAME + ": Error creating multicast socket!");
-     }
+    // allow communication
+    open = true;
 
-     try {
-       //get group address
-       groupInetAddress = InetAddress.getByName(GROUP_ADDRESS);
-     }
-     catch (UnknownHostException e) {
-       System.out.println(CHANNEL_NAME + ": Error getting Inet Address!");
-     }
+    try {
+      // get a multicast socket
+      socket = new MulticastSocket(port);
+    }
+    catch (IOException e) {
+      System.out.println(channelName + ": Error creating multicast socket!");
+    }
 
-     try {
+    try {
+      // get group address
+      groupInetAddress = InetAddress.getByName(groupAddress);
+    }
+    catch (UnknownHostException e) {
+      System.out.println(channelName + ": Error getting Inet Address!");
+    }
+
+    try {
       // join multicast group
       socket.joinGroup(groupInetAddress);
-     }
-     catch (IOException e) {
-       System.out.println(CHANNEL_NAME + ": Error joining multicast group!");
-     }
-   }
+    }
+    catch (IOException e) {
+      System.out.println(channelName + ": Error joining multicast group!");
+    }
+  }
 
-   @Override
-   public void run() {
+  protected abstract void handler(String received);
 
-     while (open) {
+  @Override
+  public void run() {
 
-       byte[] buf = new byte[BUFFER_SIZE];
-       DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    while (open) {
 
-       try {
-         // listen to the channel
-         socket.receive(packet);
-       }
-       catch (IOException e){
-         System.out.println(CHANNEL_NAME + ": Error receiving packet from socket!");
-       }
+      byte[] buf = new byte[bufferSize];
+      DatagramPacket packet = new DatagramPacket(buf, buf.length);
 
-       // get received string
-       String received = new String(packet.getData(), 0, packet.getLength());
-       System.out.println("Received: " + received);
+      try {
+        // listen to the channel
+        socket.receive(packet);
+      }
+      catch (IOException e){
+        System.out.println(channelName + ": Error receiving packet from socket!");
+      }
 
-       handler(received);
-     }
+      // get received string
+      String received = new String(packet.getData(), 0, packet.getLength());
+      System.out.println("Received: " + received);
 
-     // end communications
-     try {
-       socket.leaveGroup(groupInetAddress);
-     }
-     catch (IOException e) {
-       System.out.println(CHANNEL_NAME + ": Error leaving multicast group!");
-     }
+      handler(received);
+    }
 
-     socket.close();
-   }
+    // end communications
+    try {
+      socket.leaveGroup(groupInetAddress);
+    }
+    catch (IOException e) {
+      System.out.println(channelName + ": Error leaving multicast group!");
+    }
 
-   protected abstract void handler(String received);
+    socket.close();
+  }
+
 }
