@@ -7,14 +7,20 @@ import java.util.*;
 */
 public class ControlChannelListener extends ChannelListener {
 
-  // #define
+  /** Name of the listened channel */
   private static final String CHANNEL_NAME = "(MC) Control Channel";
-  private static final int PORT = 8081;
-  private static final String GROUP_ADDRESS = "230.0.0.1";
+  /** Port number of listened channel */
+  private static final int CHANNEL_PORT = 8081;
+  /** IP multicast address of listened channel */
+  private static final String CHANNEL_ADDRESS = "230.0.0.1";
+  /** Size of packet buffer */
   private static final int BUFFER_SIZE = 256;
 
+  /**
+  * Constructor
+  */
   public ControlChannelListener() {
-    super(CHANNEL_NAME, PORT, GROUP_ADDRESS, BUFFER_SIZE);
+    super(CHANNEL_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE);
   }
 
   @Override

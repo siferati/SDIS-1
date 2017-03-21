@@ -7,24 +7,39 @@ import java.util.*;
 */
 public abstract class ChannelMessenger implements Runnable {
 
-  // attrs obtained from subclasses
+  /** Name of the messenger (usually contains the name of the destination channel) */
   protected String messengerName;
+  /** Port number of messenger's socket */
   protected int port;
-  protected int groupPort;
-  protected String groupAddress;
+  /** Port number of destination channel */
+  protected int channelPort;
+  /** IP multicast address of destination channel */
+  protected String channelAddress;
+  /** Size of packet buffer */
   protected int bufferSize;
+  /** Message to send to the destination channel */
   protected String message;
-
-  // common attrs
+  /** Datagram Socket */
   protected DatagramSocket socket;
-  protected InetAddress groupInetAddress;
+  /** Inet address of listened channel */
+  protected InetAddress channelInetAddress;
 
-  public ChannelMessenger(String messengerName, int port, int groupPort, String groupAddress, int bufferSize, String message) {
+  /**
+  * Constructor (called by subclasses)
+  *
+  * @param messengerName Name of the messenger
+  * @param port Port number of messenger's socket
+  * @param channelPort Port number of destination channel
+  * @param channelAddress IP multicast address of destination channels
+  * @param bufferSize Size of packet buffer
+  * @param message Message to send to the destination channel
+  */
+  public ChannelMessenger(String messengerName, int port, int channelPort, String channelAddress, int bufferSize, String message) {
 
     this.messengerName = messengerName;
     this.port = port;
-    this.groupPort = groupPort;
-    this.groupAddress = groupAddress;
+    this.channelPort = channelPort;
+    this.channelAddress = channelAddress;
     this.bufferSize = bufferSize;
     this.message = message;
 
@@ -37,8 +52,8 @@ public abstract class ChannelMessenger implements Runnable {
     }
 
     try {
-      // get group address
-      groupInetAddress = InetAddress.getByName(groupAddress);
+      // get channel address
+      channelInetAddress = InetAddress.getByName(channelAddress);
     }
     catch (UnknownHostException e) {
       System.out.println(messengerName + ": Error getting Inet Address!");
@@ -55,14 +70,14 @@ public abstract class ChannelMessenger implements Runnable {
     buffer = message.getBytes();
 
     // fill packet with message
-    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, groupInetAddress, groupPort);
+    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, channelInetAddress, channelPort);
 
     try {
       // send message
       socket.send(packet);
     }
     catch (Exception e) {
-      //
+      System.out.println(messengerName + ": Error sending the message!");
     }
 
     // end communication
