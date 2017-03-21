@@ -1,32 +1,28 @@
-# java compiler
-JCC = javac
-
 # output directory (added to classpath)
-OUTDIR = bin/
+BIN = bin/
 
 # input directory
-INDIR = src/
+SRC = src/
 
-# compilation flags
-JFLAGS = -g -d $(OUTDIR) -cp $(INDIR)
+# java compiler
+JC = javac
 
-# typing 'make' will invoke the first target entry in the makefile
-# (the default one in this case)
-default: Peer.class ControlChannelListener.class ControlChannelMessenger.class
+# compile flags
+JFLAGS = -d $(BIN) -cp $(SRC)
 
-# this target entry builds the Average class
-# the Average.class file is dependent on the Average.java file
-# and the rule associated with this entry gives the command to create it
-Peer.class: $(INDIR)Peer.java
-	$(JCC) $(JFLAGS) $(INDIR)Peer.java
+sourcefiles = $(addprefix $(SRC), \
+	Peer.java \
+	ControlChannelListener.java \
+	ControlChannelMessenger.java \
+	ChannelListener.java \
+	ChannelMessenger.java)
 
-ControlChannelListener.class: $(INDIR)ControlChannelListener.java
-	$(JCC) $(JFLAGS) $(INDIR)ControlChannelListener.java
+classfiles = $(sourcefiles:.java=.class)
 
-ControlChannelMessenger.class: $(INDIR)ControlChannelMessenger.java
-	$(JCC) $(JFLAGS) $(INDIR)ControlChannelMessenger.java
+all: $(classfiles)
 
-# To start over from scratch, type 'make clean'.
-# Removes all .class files, so that the next make rebuilds them
+%.class: %.java
+	$(JC) $(JFLAGS) $<
+
 clean:
-	$(RM) $(OUTDIR)*.class
+	$(RM)  $(BIN)*.class
