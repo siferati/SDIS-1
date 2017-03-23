@@ -9,8 +9,6 @@ public class ControlChannelMessenger extends ChannelMessenger {
 
   /** Name of the messenger (usually contains the name of the destination channel) */
   private static final String MESSENGER_NAME = "(MCM) Multicast Control Channel Messenger";
-  /** Port number of messenger's socket */
-  private static final int PORT = 8080;
   /** Port number of destination channel */
   private static final int CHANNEL_PORT = 8081;
   /** IP multicast address of destination channel */
@@ -24,7 +22,7 @@ public class ControlChannelMessenger extends ChannelMessenger {
   * @param message Message to send to the destination channel
   */
   public ControlChannelMessenger(String message) {
-    super(MESSENGER_NAME, PORT, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, message);
+    super(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, message);
   }
 
 }

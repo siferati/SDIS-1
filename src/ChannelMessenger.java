@@ -9,8 +9,6 @@ public abstract class ChannelMessenger implements Runnable {
 
   /** Name of the messenger (usually contains the name of the destination channel) */
   protected String messengerName;
-  /** Port number of messenger's socket */
-  protected int port;
   /** Port number of destination channel */
   protected int channelPort;
   /** IP multicast address of destination channel */
@@ -20,7 +18,7 @@ public abstract class ChannelMessenger implements Runnable {
   /** Message to send to the destination channel */
   protected String message;
   /** Datagram Socket */
-  protected DatagramSocket socket;
+  protected MulticastSocket socket;
   /** Inet address of listened channel */
   protected InetAddress channelInetAddress;
 
@@ -28,26 +26,24 @@ public abstract class ChannelMessenger implements Runnable {
   * Constructor (called by subclasses)
   *
   * @param messengerName Name of the messenger
-  * @param port Port number of messenger's socket
   * @param channelPort Port number of destination channel
   * @param channelAddress IP multicast address of destination channels
   * @param bufferSize Size of packet buffer
   * @param message Message to send to the destination channel
   */
-  public ChannelMessenger(String messengerName, int port, int channelPort, String channelAddress, int bufferSize, String message) {
+  public ChannelMessenger(String messengerName, int channelPort, String channelAddress, int bufferSize, String message) {
 
     this.messengerName = messengerName;
-    this.port = port;
     this.channelPort = channelPort;
     this.channelAddress = channelAddress;
     this.bufferSize = bufferSize;
     this.message = message;
 
     try {
-      // get a multicast socket
-      socket = new DatagramSocket(port);
+      // get a multicast socket (no need to bind it to a port)
+      socket = new MulticastSocket();
     }
-    catch (SocketException e) {
+    catch (IOException e) {
       System.out.println(messengerName + ": Error creating datagram socket!");
     }
 
