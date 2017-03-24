@@ -3,25 +3,25 @@ import java.net.*;
 import java.util.*;
 
 /**
-* Peer thread to listen to the multicast control channel (MC)
+* Peer thread to listen to the multicast data backup channel (MDB)
 */
-public class ControlChannelListener extends ChannelListener {
+public class BackupChannelListener extends ChannelListener {
 
   /** Name of the listened channel */
-  public static final String CHANNEL_NAME = "(MC) Control Channel";
+  public static final String CHANNEL_NAME = "(MDB) Data Backup Channel";
   /** Name of the messenger */
   public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
   /** Port number of listened channel */
-  public static final int CHANNEL_PORT = 8081;
+  public static final int CHANNEL_PORT = 8082;
   /** IP multicast address of listened channel */
-  public static final String CHANNEL_ADDRESS = "230.0.0.1";
+  public static final String CHANNEL_ADDRESS = "230.0.0.2";
   /** Size of packet buffer */
   public static final int BUFFER_SIZE = 256;
 
   /**
   * Constructor
   */
-  public ControlChannelListener() {
+  public BackupChannelListener() {
     super(CHANNEL_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE);
   }
 

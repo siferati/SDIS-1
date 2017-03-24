@@ -90,7 +90,7 @@ public abstract class ChannelListener implements Runnable {
 
       // get received string
       String received = new String(packet.getData(), 0, packet.getLength());
-      System.out.println("Received: " + received);
+      System.out.println(channelName + ": " + received);
 
       handler(received);
     }

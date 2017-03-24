@@ -12,11 +12,12 @@ JFLAGS = -d $(BIN) -cp $(SRC)
 
 # list of all .java files to compile
 sourcefiles = $(addprefix $(SRC), \
+	BackupChannelListener.java \
 	ChannelListener.java \
 	ChannelMessenger.java \
 	ControlChannelListener.java \
-	ControlChannelMessenger.java \
-	Peer.java)
+	Peer.java \
+	RestoreChannelListener.java)
 
 # list of all .class files to generate
 classfiles = $(patsubst $(SRC)%.java,$(BIN)%.class,$(sourcefiles))

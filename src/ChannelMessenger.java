@@ -5,7 +5,7 @@ import java.util.*;
 /**
 * Peer thread to send messages to a multicast channel
 */
-public abstract class ChannelMessenger implements Runnable {
+public class ChannelMessenger implements Runnable {
 
   /** Name of the messenger (usually contains the name of the destination channel) */
   protected String messengerName;
