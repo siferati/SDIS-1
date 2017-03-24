@@ -1,9 +1,18 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "Peer"
 
 jar {
   manifest {
     attributes(
-      'Main-Class': 'Peer'
+      'Main-Class': mainClassName
     )
+  }
+}
+
+run {
+  if(project.hasProperty('a')){
+    args(a.split(','))
   }
 }
