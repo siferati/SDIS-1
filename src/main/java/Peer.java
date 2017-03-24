@@ -11,6 +11,7 @@ public class Peer {
     * @param args Arguments passed in the terminal
     */
     public static void main(String[] args) {
+        System.out.println("Peer started!");
         if (args.length == 2) {
           if (args[0].equals("MC")) {
             new Thread(new ChannelMessenger(ControlChannelListener.MESSENGER_NAME, ControlChannelListener.CHANNEL_PORT, ControlChannelListener.CHANNEL_ADDRESS, ControlChannelListener.BUFFER_SIZE, args[1])).start();

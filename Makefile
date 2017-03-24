@@ -2,7 +2,7 @@
 BIN = bin/
 
 # input directory
-SRC = src/
+SRC = src/main/java/
 
 # java compiler
 JC = javac
