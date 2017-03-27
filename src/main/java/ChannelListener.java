@@ -67,10 +67,27 @@ public abstract class ChannelListener implements Runnable {
 
   /**
   * Handler called when a message is received
+  * Subclasses should override this
   *
   * @param received Message received
   */
   protected abstract void handler(String received);
+
+  /**
+  * Handler called when a message is received
+  * ALWAYS called before subclasses handlers
+  *
+  * @param received Message received
+  */
+  private final void superHandler(String received) {
+
+    if (received.equals("exit")) {
+      open = false;
+    }
+    else {
+      handler(received);
+    }
+  }
 
   @Override
   public void run() {
@@ -90,9 +107,10 @@ public abstract class ChannelListener implements Runnable {
 
       // get received string
       String received = new String(packet.getData(), 0, packet.getLength());
+
       System.out.println(channelName + ": " + received);
 
-      handler(received);
+      superHandler(received);
     }
 
     // end communications
@@ -104,6 +122,8 @@ public abstract class ChannelListener implements Runnable {
     }
 
     socket.close();
+
+    System.out.println(channelName + ": " + "Communication closed");
   }
 
 }

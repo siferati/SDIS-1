@@ -38,4 +38,13 @@ public class ControlChannelListener extends ChannelListener {
     }
   }
 
+  /**
+  * Create a Messenger to send a message to this channel
+  *
+  * @param msg Message to send
+  */
+  public static void sendMessage(String msg) {
+    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg)).start();
+  }
+
 }

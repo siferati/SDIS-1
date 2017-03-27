@@ -27,15 +27,22 @@ public class BackupChannelListener extends ChannelListener {
 
   @Override
   protected void handler(String received) {
-    try {
-      Thread.sleep(1000);
 
-      // send a message to the channel
-      new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, received)).start();
+    if (received.equals("PUTCHUNK")) {
+      // create message
+      PutChunkMessage message = new PutChunkMessage("1.0", 1, "A1B2C3", 0, 1, "body");
+      // send message
+      new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, message.toString())).start();
     }
-    catch (Exception e){
-      // ...
-    }
+  }
+
+  /**
+  * Create a Messenger to send a message to this channel
+  *
+  * @param msg Message to send
+  */
+  public static void sendMessage(String msg) {
+    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg)).start();
   }
 
 }
