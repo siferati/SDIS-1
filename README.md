@@ -35,8 +35,6 @@
 
 ## Generating Docs
 
-### Using ``gradle``
-
 * Open terminal in ``SDIS-1`` directory
 * Type ``./gradlew javadoc``
 * Navigate to ``build/docs/javadoc`` directory
