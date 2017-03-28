@@ -14,7 +14,7 @@ public abstract class Message {
   /**
   * Constructor
   *
-  * @see MessageHeader#constructor
+  * @see MessageHeader#MessageHeader
   * @param body Body of this message (file chunk as bytes)
   */
   public Message(String type, String version, int senderId, String fileId, int chunkNo, int repDeg, String body) {

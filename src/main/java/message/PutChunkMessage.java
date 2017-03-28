@@ -9,7 +9,7 @@ public class PutChunkMessage extends Message {
   private static final String TYPE = "PUTCHUNK";
 
   /**
-  * @see Message#constructor
+  * @see Message#Message
   */
   public PutChunkMessage(String version, int senderId, String fileId, int chunkNo, int repDeg, String body) {
     super(TYPE, version, senderId, fileId, chunkNo, repDeg, body);
