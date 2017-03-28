@@ -1,7 +1,5 @@
 package peer.message;
 
-import java.util.Arrays;
-
 /**
 * A message to be sent. Made of an header and a body.
 */

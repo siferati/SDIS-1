@@ -2,6 +2,7 @@ package peer;
 
 import peer.channel.*;
 import peer.message.*;
+import peer.file.*;
 
 import java.io.*;
 
@@ -57,13 +58,9 @@ public class Peer {
         ControlChannelListener.sendMessage(msg, 0);
         break;
       case "MDB":
-        String message;
         if (msg.equals("PUTCHUNK")) {
-          message = new PutChunkMessage("1.0", "1", "A1B2C3", "0", "1", "body").toString();
-        } else {
-          message = msg;
+          new FileManager().transfer();
         }
-        BackupChannelListener.sendMessage(message);
         break;
       case "MDR":
         RestoreChannelListener.sendMessage(msg);

@@ -18,7 +18,7 @@ public class RestoreChannelListener extends ChannelListener {
   /** {@link ChannelListener#channelAddress} */
   public static final String CHANNEL_ADDRESS = "230.0.0.3";
   /** {@link ChannelListener#bufferSize} */
-  public static final int BUFFER_SIZE = 256;
+  public static final int BUFFER_SIZE = 128000;
 
   /**
   * Constructor

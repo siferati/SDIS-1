@@ -76,8 +76,10 @@ public class ChannelMessenger implements Runnable {
     DatagramPacket packet = new DatagramPacket(buffer, buffer.length, channelInetAddress, channelPort);
 
     try {
-      // wait for delay
-      Thread.sleep(delay);
+      if (delay > 0) {
+        // wait for delay
+        Thread.sleep(delay);  
+      }
 
       // send message
       socket.send(packet);
