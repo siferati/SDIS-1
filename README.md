@@ -7,6 +7,11 @@
 
 ## How to run
 
+* Open a terminal in ``SDIS-1`` directory
+* Type ``./gradlew run`` to start listening
+* Open a new terminal in ``SDIS-1`` directory
+* Type ``./gradlew run -Pa=<CH>,<MSG>`` to send a message to chosen channel
+
 ### Arguments
 
 * ``<CH>`` Multicast Channel
@@ -21,13 +26,6 @@
 
 * ``<EXIT>`` Exit
   * ``exit`` Call program with only this argument to close all listeners
-
-### Using ``gradle``
-
-* Open a terminal in ``SDIS-1`` directory
-* Type ``./gradlew run`` to start listening
-* Open a new terminal in ``SDIS-1`` directory
-* Type ``./gradlew run -Pa=<CH>,<MSG>`` to send a message to chosen channel
 
 ## How to clean
 
