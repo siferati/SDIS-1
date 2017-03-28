@@ -1,4 +1,7 @@
-import channel.*;
+package peer;
+
+import peer.channel.*;
+import peer.message.*;
 
 import java.io.*;
 
@@ -34,7 +37,7 @@ public class Peer {
   public static void closeAll() {
     String msg = "exit";
 
-    ControlChannelListener.sendMessage(msg);
+    ControlChannelListener.sendMessage(msg, 0);
 
     BackupChannelListener.sendMessage(msg);
 
@@ -51,10 +54,16 @@ public class Peer {
 
     switch (ch) {
       case "MC":
-        ControlChannelListener.sendMessage(msg);
+        ControlChannelListener.sendMessage(msg, 0);
         break;
       case "MDB":
-        BackupChannelListener.sendMessage(msg);
+        String message;
+        if (msg.equals("PUTCHUNK")) {
+          message = new PutChunkMessage("1.0", "1", "A1B2C3", "0", "1", "body").toString();
+        } else {
+          message = msg;
+        }
+        BackupChannelListener.sendMessage(message);
         break;
       case "MDR":
         RestoreChannelListener.sendMessage(msg);

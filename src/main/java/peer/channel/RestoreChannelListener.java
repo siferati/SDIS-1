@@ -1,4 +1,4 @@
-package channel;
+package peer.channel;
 
 import java.io.*;
 import java.net.*;
@@ -9,15 +9,15 @@ import java.util.*;
 */
 public class RestoreChannelListener extends ChannelListener {
 
-  /** Name of the listened channel */
+  /** {@link ChannelListener#channelName} */
   public static final String CHANNEL_NAME = "(MDR) Data Restore Channel";
-  /** Name of the messenger */
+  /** {@link ChannelMessenger#messengerName} */
   public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
-  /** Port number of listened channel */
+  /** {@link ChannelListener#channelPort} */
   public static final int CHANNEL_PORT = 8083;
-  /** IP multicast address of listened channel */
+  /** {@link ChannelListener#channelAddress} */
   public static final String CHANNEL_ADDRESS = "230.0.0.3";
-  /** Size of packet buffer */
+  /** {@link ChannelListener#bufferSize} */
   public static final int BUFFER_SIZE = 256;
 
   /**
@@ -29,24 +29,16 @@ public class RestoreChannelListener extends ChannelListener {
 
   @Override
   protected void handler(String received) {
-    try {
-      Thread.sleep(1000);
 
-      // send a message to the channel
-      new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, received)).start();
-    }
-    catch (Exception e){
-      // ...
-    }
   }
 
   /**
   * Create a Messenger to send a message to this channel
   *
-  * @param msg Message to send
+  * @param msg {@link ChannelMessenger#message}
   */
   public static void sendMessage(String msg) {
-    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg)).start();
+    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, 0)).start();
   }
 
 }

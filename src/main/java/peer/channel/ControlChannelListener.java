@@ -1,4 +1,4 @@
-package channel;
+package peer.channel;
 
 import java.io.*;
 import java.net.*;
@@ -9,15 +9,15 @@ import java.util.*;
 */
 public class ControlChannelListener extends ChannelListener {
 
-  /** Name of the listened channel */
+  /** {@link ChannelListener#channelName} */
   public static final String CHANNEL_NAME = "(MC) Control Channel";
-  /** Name of the messenger */
+  /** {@link ChannelMessenger#messengerName} */
   public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
-  /** Port number of listened channel */
+  /** {@link ChannelListener#channelPort} */
   public static final int CHANNEL_PORT = 8081;
-  /** IP multicast address of listened channel */
+  /** {@link ChannelListener#channelAddress} */
   public static final String CHANNEL_ADDRESS = "230.0.0.1";
-  /** Size of packet buffer */
+  /** {@link ChannelListener#bufferSize} */
   public static final int BUFFER_SIZE = 256;
 
   /**
@@ -29,24 +29,17 @@ public class ControlChannelListener extends ChannelListener {
 
   @Override
   protected void handler(String received) {
-    try {
-      Thread.sleep(1000);
 
-      // send a message to the channel
-      new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, received)).start();
-    }
-    catch (Exception e){
-      // ...
-    }
   }
 
   /**
   * Create a Messenger to send a message to this channel
   *
-  * @param msg Message to send
+  * @param msg {@link ChannelMessenger#message}
+  * @param delay {@link ChannelMessenger#delay}
   */
-  public static void sendMessage(String msg) {
-    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg)).start();
+  public static void sendMessage(String msg, int delay) {
+    new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, delay)).start();
   }
 
 }

@@ -1,4 +1,4 @@
-package channel;
+package peer.channel;
 
 import java.io.*;
 import java.net.*;
@@ -21,25 +21,30 @@ public class ChannelMessenger implements Runnable {
   protected String message;
   /** Datagram Socket */
   protected MulticastSocket socket;
-  /** Inet address of listened channel */
+  /** Inet address of destination channel */
   protected InetAddress channelInetAddress;
+  /** Number of milliseconds to wait before sending the message */
+  protected int delay;
 
   /**
   * Constructor (called by subclasses)
   *
-  * @param messengerName Name of the messenger
-  * @param channelPort Port number of destination channel
-  * @param channelAddress IP multicast address of destination channels
-  * @param bufferSize Size of packet buffer
-  * @param message Message to send to the destination channel
+  * @param messengerName {@link #messengerName}
+  * @param channelPort {@link #channelPort}
+  * @param channelAddress {@link #channelAddress}
+  * @param bufferSize {@link #bufferSize}
+  * @param message {@link #message}
+  * @param delay {@link #delay}
   */
-  public ChannelMessenger(String messengerName, int channelPort, String channelAddress, int bufferSize, String message) {
+  public ChannelMessenger(String messengerName, int channelPort, String channelAddress, int bufferSize, String message, int delay) {
 
     this.messengerName = messengerName;
     this.channelPort = channelPort;
     this.channelAddress = channelAddress;
     this.bufferSize = bufferSize;
     this.message = message;
+    this.delay = delay;
+
 
     try {
       // get a multicast socket (no need to bind it to a port)
@@ -71,6 +76,9 @@ public class ChannelMessenger implements Runnable {
     DatagramPacket packet = new DatagramPacket(buffer, buffer.length, channelInetAddress, channelPort);
 
     try {
+      // wait for delay
+      Thread.sleep(delay);
+
       // send message
       socket.send(packet);
     }

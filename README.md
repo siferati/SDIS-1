@@ -7,26 +7,41 @@
 
 ## How to run
 
+### Arguments
+
+* ``<CH>`` Multicast Channel
+ * ``MC`` Main Channel
+ * ``MDB`` Data Backup Channel
+ * ``MDR`` Data Restore Channel
+
+
+* ``<MSG>`` Message
+ * ``PUTCHUNK``
+
+
+* ``<EXIT>`` Exit
+ * ``exit`` Call program with only this argument to close all listeners
+
 ### Using ``gradle``
 
 * Open a terminal in ``SDIS-1`` directory
 * Type ``./gradlew run`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
-* Type ``./gradlew run -Pa=MC|MDB|MDR,<MESSAGE>`` to send a message to chosen channel
+* Type ``./gradlew run -Pa=<CH>,<MSG>`` to send a message to chosen channel
 
 ### Using ``-classpath``
 
 * Open a terminal in ``SDIS-1`` directory
 * Type ``java -cp build/classes/main Peer`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
-* Type ``java -cp build/classes/main Peer MC|MDB|MDR <MESSAGE>`` to send a message to chosen channel
+* Type ``java -cp build/classes/main Peer <CH> <MSG>`` to send a message to chosen channel
 
 ### Using ``-jar``
 
 * Open a terminal in ``SDIS-1`` directory
 * Type ``java -jar build/libs/SDIS-1.jar`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
-* Type ``java -jar build/libs/SDIS-1.jar MC|MDB|MDR <MESSAGE>`` to send a message to chosen channel
+* Type ``java -jar build/libs/SDIS-1.jar <CH> <MSG>`` to send a message to chosen channel
 
 ## How to clean
 

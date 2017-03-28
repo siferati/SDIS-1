@@ -1,4 +1,4 @@
-package channel;
+package peer.channel;
 
 import java.io.*;
 import java.net.*;
@@ -27,10 +27,10 @@ public abstract class ChannelListener implements Runnable {
   /**
   * Constructor (called by subclasses)
   *
-  * @param channelName Name of the listened channel
-  * @param channelPort Port number of listened channel
-  * @param channelAddress IP multicast address of listened channel
-  * @param bufferSize Size of packet buffer
+  * @param channelName {@link #channelName}
+  * @param channelPort {@link #channelPort}
+  * @param channelAddress {@link #channelAddress}
+  * @param bufferSize {@link #bufferSize}
   */
   public ChannelListener(String channelName, int channelPort, String channelAddress, int bufferSize) {
 
@@ -68,7 +68,7 @@ public abstract class ChannelListener implements Runnable {
   }
 
   /**
-  * Handler called when a message is received
+  * Handler called when a message is received.
   * Subclasses should override this
   *
   * @param received Message received
@@ -77,7 +77,8 @@ public abstract class ChannelListener implements Runnable {
 
   /**
   * Handler called when a message is received
-  * ALWAYS called before subclasses handlers
+  *
+  * @see #handler
   *
   * @param received Message received
   */

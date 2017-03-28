@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = "Peer"
+mainClassName = "peer.Peer"
 
 jar {
   manifest {
@@ -15,4 +15,8 @@ run {
   if(project.hasProperty('a')){
     args(a.split(','))
   }
+}
+
+javadoc {
+  options.memberLevel = JavadocMemberLevel.PRIVATE
 }
