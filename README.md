@@ -10,17 +10,17 @@
 ### Arguments
 
 * ``<CH>`` Multicast Channel
- * ``MC`` Main Channel
- * ``MDB`` Data Backup Channel
- * ``MDR`` Data Restore Channel
+  * ``MC`` Main Channel
+  * ``MDB`` Data Backup Channel
+  * ``MDR`` Data Restore Channel
 
 
 * ``<MSG>`` Message
- * ``PUTCHUNK``
+  * ``PUTCHUNK``
 
 
 * ``<EXIT>`` Exit
- * ``exit`` Call program with only this argument to close all listeners
+  * ``exit`` Call program with only this argument to close all listeners
 
 ### Using ``gradle``
 
