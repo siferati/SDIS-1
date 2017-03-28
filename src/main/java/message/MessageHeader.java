@@ -1,3 +1,5 @@
+package message;
+
 /**
 * Header for a Message
 *

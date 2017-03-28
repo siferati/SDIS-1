@@ -1,3 +1,5 @@
+package message;
+
 /**
 * A message to request the backup of a chunk
 */

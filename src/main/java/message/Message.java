@@ -1,3 +1,5 @@
+package message;
+
 /**
 * A message to be sent. Made of an header and a body.
 */
