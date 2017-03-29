@@ -40,7 +40,7 @@ public class BackupChannelListener extends ChannelListener {
     // figure out what to do based on message type
     switch (inmsg.getType()) {
       case "PUTCHUNK":
-        StoredMessage outmsg = new StoredMessage("1.0", "1", "A1B2C3", "0");
+        StoredMessage outmsg = new StoredMessage("1.0", "1", "A1B2C3", 0);
         // generate a random delay [1-400]ms
         int delay = ThreadLocalRandom.current().nextInt(1, 401);
         // ask a messenger to deliver the message

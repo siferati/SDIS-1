@@ -14,7 +14,7 @@ import javax.xml.bind.DatatypeConverter;
 public class FileManager {
 
   /** Max size of each file chunk */
-  public static final int CHUNK_SIZE = 64000;
+  public static final int CHUNK_SIZE = 10;
 
 
   /**
@@ -134,6 +134,8 @@ public class FileManager {
 
       String fileId = getFileId(filepath);
 
+      int chunkNo = 0;
+
       // read file into chunks
       while (fis.read(chunk) > 0) {
 
@@ -141,10 +143,13 @@ public class FileManager {
         String body = new String(chunk);
 
         // get message to send to multicast channel
-        String msg = new PutChunkMessage("1.0", "1", fileId, "0", "1", body).toString();
+        String msg = new PutChunkMessage("1.0", "1", fileId, chunkNo, "1", body).toString();
 
         // send message
         BackupChannelListener.sendMessage(msg);
+
+        // prepare next ite
+        chunkNo++;
       }
 
       // If the file size is a multiple of the chunk size,
@@ -152,7 +157,7 @@ public class FileManager {
       if (filesize % CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        String msg = new PutChunkMessage("1.0", "1", "A1B2C3", "0", "1", "").toString();
+        String msg = new PutChunkMessage("1.0", "1", "A1B2C3", 0, "1", "").toString();
 
         // send message
         BackupChannelListener.sendMessage(msg);

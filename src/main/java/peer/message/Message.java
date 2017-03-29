@@ -21,7 +21,7 @@ public class Message {
   *
   * @param body Body of this message (file chunk as bytes)
   */
-  public Message(String type, String version, String senderId, String fileId, String chunkNo, String repDeg, String body) {
+  public Message(String type, String version, String senderId, String fileId, int chunkNo, String repDeg, String body) {
 
     this.header = new MessageHeader(type, version, senderId, fileId, chunkNo, repDeg);
     this.body = body;
@@ -54,12 +54,12 @@ public class Message {
           chunk = "";
         }
 
-        message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], chunk);
+        message = new PutChunkMessage(contents[1], contents[2], contents[3], Integer.parseInt(contents[4]), contents[5], chunk);
 
         break;
 
       case "STORED":
-        message = new StoredMessage(contents[1], contents[2], contents[3], contents[4]);
+        message = new StoredMessage(contents[1], contents[2], contents[3], Integer.parseInt(contents[4]));
         break;
       default:
         message = null;
