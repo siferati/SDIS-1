@@ -47,7 +47,7 @@ public abstract class ChannelListener implements Runnable {
       socket = new MulticastSocket(channelPort);
     }
     catch (IOException e) {
-      System.out.println(channelName + ": Error creating multicast socket!");
+      System.out.println(channelName + ": Error creating multicast socket: " + e);
     }
 
     try {
@@ -55,7 +55,7 @@ public abstract class ChannelListener implements Runnable {
       channelInetAddress = InetAddress.getByName(channelAddress);
     }
     catch (UnknownHostException e) {
-      System.out.println(channelName + ": Error getting Inet Address!");
+      System.out.println(channelName + ": Error getting Inet Address: " + e);
     }
 
     try {
@@ -63,7 +63,7 @@ public abstract class ChannelListener implements Runnable {
       socket.joinGroup(channelInetAddress);
     }
     catch (IOException e) {
-      System.out.println(channelName + ": Error joining multicast group!");
+      System.out.println(channelName + ": Error joining multicast group: " + e);
     }
   }
 
@@ -105,7 +105,7 @@ public abstract class ChannelListener implements Runnable {
         socket.receive(packet);
       }
       catch (IOException e){
-        System.out.println(channelName + ": Error receiving packet from socket!");
+        System.out.println(channelName + ": Error receiving packet from socket: " + e);
       }
 
       // get received string
@@ -121,7 +121,7 @@ public abstract class ChannelListener implements Runnable {
       socket.leaveGroup(channelInetAddress);
     }
     catch (IOException e) {
-      System.out.println(channelName + ": Error leaving multicast group!");
+      System.out.println(channelName + ": Error leaving multicast group: " + e);
     }
 
     socket.close();

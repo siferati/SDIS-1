@@ -51,7 +51,7 @@ public class ChannelMessenger implements Runnable {
       socket = new MulticastSocket();
     }
     catch (IOException e) {
-      System.out.println(messengerName + ": Error creating datagram socket!");
+      System.out.println(messengerName + ": Error creating datagram socket: " + e);
     }
 
     try {
@@ -59,7 +59,7 @@ public class ChannelMessenger implements Runnable {
       channelInetAddress = InetAddress.getByName(channelAddress);
     }
     catch (UnknownHostException e) {
-      System.out.println(messengerName + ": Error getting Inet Address!");
+      System.out.println(messengerName + ": Error getting Inet Address: " + e);
     }
   }
 
@@ -78,14 +78,14 @@ public class ChannelMessenger implements Runnable {
     try {
       if (delay > 0) {
         // wait for delay
-        Thread.sleep(delay);  
+        Thread.sleep(delay);
       }
 
       // send message
       socket.send(packet);
     }
     catch (Exception e) {
-      System.out.println(messengerName + ": Error sending the message!");
+      System.out.println(messengerName + ": Error sending the message: " + e);
     }
 
     // end communication

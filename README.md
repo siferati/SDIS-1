@@ -7,10 +7,19 @@
 
 ## How to run
 
+### Using ``gradle``
+
 * Open a terminal in ``SDIS-1`` directory
 * Type ``./gradlew run`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
 * Type ``./gradlew run -Pa=<CH>,<MSG>`` to send a message to chosen channel
+
+### Using ``-jar``
+
+* Open a terminal in ``SDIS-1`` directory
+* Type ``java -jar build/libs/SDIS-1.jar`` to start listening
+* Open a new terminal in ``SDIS-1`` directory
+* Type ``java -jar build/libs/SDIS-1.jar <CH> <MSG>`` to send a message to chosen channel
 
 ### Arguments
 
@@ -25,7 +34,7 @@
 
 
 * ``<EXIT>`` Exit
-  * ``exit`` Call program with only this argument to close all listeners
+  * ``exit`` Call with only this argument to close all listeners
 
 ## How to clean
 

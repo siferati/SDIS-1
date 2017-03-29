@@ -22,7 +22,7 @@ public class BackupChannelListener extends ChannelListener {
   /** {@link ChannelListener#channelAddress} */
   public static final String CHANNEL_ADDRESS = "230.0.0.2";
   /** {@link ChannelListener#bufferSize} */
-  public static final int BUFFER_SIZE = 128000;
+  public static final int BUFFER_SIZE = 64 * 1024;
 
   /**
   * Constructor

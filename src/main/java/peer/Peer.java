@@ -59,7 +59,7 @@ public class Peer {
         break;
       case "MDB":
         if (msg.equals("PUTCHUNK")) {
-          new FileManager().transfer();
+          backup("testing/file.txt");
         }
         break;
       case "MDR":
@@ -68,5 +68,12 @@ public class Peer {
       default:
         break;
     }
+  }
+
+  /**
+  * @see FileManager#backup
+  */
+  public static void backup(String filepath) {
+    new FileManager().backup(filepath);
   }
 }

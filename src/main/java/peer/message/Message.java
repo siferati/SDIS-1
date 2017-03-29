@@ -43,9 +43,21 @@ public class Message {
 
     // figure out what message type to return
     switch (contents[0]) {
+
       case "PUTCHUNK":
-        message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], contents[6]);
+
+        String chunk;
+
+        if (contents.length == 7) {
+          chunk = contents[6];
+        } else {
+          chunk = "";
+        }
+
+        message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], chunk);
+
         break;
+
       case "STORED":
         message = new StoredMessage(contents[1], contents[2], contents[3], contents[4]);
         break;
