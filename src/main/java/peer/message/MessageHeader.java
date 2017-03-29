@@ -19,7 +19,7 @@ public class MessageHeader {
   /** Id of file for backup service */
   public String fileId;
   /** Number of the chuck of file */
-  public int chunkNo;
+  public String chunkNo;
   /** Desired replication degree of the chunk */
   public String repDeg;
   /** Line terminator */
@@ -35,7 +35,7 @@ public class MessageHeader {
   * @param chunkNo {@link #chunkNo}
   * @param repDeg {@link #repDeg}
   */
-  public MessageHeader(String type, String version, String senderId, String fileId, int chunkNo, String repDeg) {
+  public MessageHeader(String type, String version, String senderId, String fileId, String chunkNo, String repDeg) {
 
     this.type = type;
     this.version = version;

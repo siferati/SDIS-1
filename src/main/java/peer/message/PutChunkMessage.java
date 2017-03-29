@@ -13,7 +13,7 @@ public class PutChunkMessage extends Message {
   *
   * @see Message#Message
   */
-  public PutChunkMessage(String version, String senderId, String fileId, int chunkNo, String repDeg, String body) {
+  public PutChunkMessage(String version, String senderId, String fileId, String chunkNo, String repDeg, String body) {
     super(TYPE, version, senderId, fileId, chunkNo, repDeg, body);
   }
 }
