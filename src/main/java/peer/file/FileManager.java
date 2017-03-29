@@ -157,7 +157,7 @@ public class FileManager {
       if (filesize % CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        String msg = new PutChunkMessage("1.0", "1", "A1B2C3", 0, "1", "").toString();
+        String msg = new PutChunkMessage("1.0", "1", fileId, chunkNo, "1", "").toString();
 
         // send message
         BackupChannelListener.sendMessage(msg);

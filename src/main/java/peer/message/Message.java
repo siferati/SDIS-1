@@ -71,7 +71,7 @@ public class Message {
 
   @Override
   public String toString() {
-    return header.toString() + "" + body;
+    return header.toString() + body;
   }
 
   /**
@@ -81,5 +81,23 @@ public class Message {
   */
   public String getType() {
     return header.type;
+  }
+
+  /**
+  * Getter
+  *
+  * @return {@link MessageHeader#chunkNo}
+  */
+  public int getChunkNo() {
+    return header.chunkNo;
+  }
+
+  /**
+  * Getter
+  *
+  * @return {@link MessageHeader#fileId}
+  */
+  public String getFileId() {
+    return header.fileId;
   }
 }

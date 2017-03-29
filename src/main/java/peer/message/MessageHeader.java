@@ -48,6 +48,6 @@ public class MessageHeader {
 
   @Override
   public String toString() {
-    return type + " " + version + " " + senderId + " " + fileId + " " + chunkNo + " " + repDeg + " " + CRLF + "" + CRLF;
+    return type + " " + version + " " + senderId + " " + fileId + " " + chunkNo + " " + repDeg + " " + CRLF + CRLF;
   }
 }
