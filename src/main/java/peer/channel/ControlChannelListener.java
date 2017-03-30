@@ -39,8 +39,44 @@ public class ControlChannelListener extends ChannelListener {
 
       case "STORED":
 
-        // check if this peer is interested in this store
-        
+        synchronized (waitingConfirmation) {
+
+          int i;
+
+          // check if this peer is interested in this store
+          if ((i = waitingConfirmation.indexOf(received)) > 0) {
+
+            PutChunkMessage msg = waitingConfirmation.get(i);
+
+            // add sender to history
+            if (msg.addSaver(received.getSenderId())) {
+
+              // add one to rep deg
+              msg.addActualRepDeg();
+            }
+
+            // if time window for stored is over
+            if (!msg.getWaiting()) {
+
+              // if rep deg was achieved
+              if (msg.getActualRepDeg() > Integer.parseInt(msg.getRepDeg())) {
+
+                // remove this message from the "queue"
+                waitingConfirmation.remove(i);
+              }
+              else {
+
+                // send message again, this time doubling the time window
+                if (!msg.resend()) {
+                  
+                  // if max attempts to resend were achieved
+                  // remove this message from the "queue"
+                  waitingConfirmation.remove(i);
+                }
+              }
+            }
+          }
+        }
 
         break;
 

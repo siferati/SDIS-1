@@ -149,12 +149,14 @@ public class FileManager {
 
         // add this message to waiting "queue"
         synchronized (ControlChannelListener.waitingConfirmation) {
+
           ControlChannelListener.waitingConfirmation.add(message);
+
           System.out.println(ControlChannelListener.waitingConfirmation.size());
         }
 
-        // send message
-        BackupChannelListener.sendMessage(msg);
+        // send message to MDB channel
+        message.send();
 
         // prepare next ite
         chunkNo++;
