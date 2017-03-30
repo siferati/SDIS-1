@@ -5,6 +5,7 @@ import peer.message.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.Collections;
 
 /**
 * Peer thread to listen to the multicast control channel (MC)
@@ -21,6 +22,8 @@ public class ControlChannelListener extends ChannelListener {
   public static final String CHANNEL_ADDRESS = "230.0.0.1";
   /** {@link ChannelListener#bufferSize} */
   public static final int BUFFER_SIZE = 64 * 1024;
+  /** A synchronized arraylist holding messages waiting for STORED confirmation */
+  public static ArrayList<PutChunkMessage> waitingConfirmation = new ArrayList<PutChunkMessage>(Collections.synchronizedList(new ArrayList<PutChunkMessage>()));
 
   /**
   * Constructor
@@ -32,6 +35,18 @@ public class ControlChannelListener extends ChannelListener {
   @Override
   protected void handler(Message received) {
 
+    switch (received.getType()) {
+
+      case "STORED":
+
+        // check if this peer is interested in this store
+        
+
+        break;
+
+      default:
+        break;
+    }
   }
 
   /**

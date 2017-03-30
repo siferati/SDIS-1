@@ -142,8 +142,16 @@ public class FileManager {
         // turn bytes read into a string
         String body = new String(chunk);
 
+        PutChunkMessage message = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
+
         // get message to send to multicast channel
-        String msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body).toString();
+        String msg = message.toString();
+
+        // add this message to waiting "queue"
+        synchronized (ControlChannelListener.waitingConfirmation) {
+          ControlChannelListener.waitingConfirmation.add(message);
+          System.out.println(ControlChannelListener.waitingConfirmation.size());
+        }
 
         // send message
         BackupChannelListener.sendMessage(msg);
