@@ -1,5 +1,7 @@
 package peer.channel;
 
+import peer.message.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -28,7 +30,7 @@ public class ControlChannelListener extends ChannelListener {
   }
 
   @Override
-  protected void handler(String received) {
+  protected void handler(Message received) {
 
   }
 

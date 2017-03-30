@@ -32,16 +32,15 @@ public class RestoreChannelListener extends ChannelListener {
     }
 
     @Override
-    protected void handler(String received) {
-        // parse message
-        Message inmsg = Message.parser(received);
+    protected void handler(Message received) {
+
         int delay = 0;
 
         // figure out what to do based on message type
-        switch (inmsg.getType()) {
+        switch (received.getType()) {
             case "GETCHUNK": //iniciator peer manda msg getchunk para MC
             {
-                GetChunkMessage outmsg = new GetChunkMessage(inmsg.getVersion(), inmsg.getSenderId(), inmsg.getFileId(), String.valueOf(inmsg.getChunkNo()));
+                GetChunkMessage outmsg = new GetChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), String.valueOf(received.getChunkNo()));
 
                 // ask a messenger to deliver the message
                 ControlChannelListener.sendMessage(outmsg.toString(), delay);
@@ -50,14 +49,14 @@ public class RestoreChannelListener extends ChannelListener {
             }
             case "CHUNK": //outros peers veem se tem um chunk e mandam para MDR
             {
-                String fileId = inmsg.getFileId();
-                String chunkNo = inmsg.getChunkNo();
+                String fileId = received.getFileId();
+                String chunkNo = received.getChunkNo();
                 String fileName = fileId + "-" + chunkNo;
 
                 File chunk = new File(fileName);
 
                 if(chunk.exists()){
-                    ChunkMessage outmsg = new ChunkMessage(inmsg.getVersion(), inmsg.getSenderId(), inmsg.getFileId(), inmsg.getChunkNo());
+                    ChunkMessage outmsg = new ChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo());
 
                     // generate a random delay [1-400]ms
                     delay = ThreadLocalRandom.current().nextInt(1, 401);

@@ -1,5 +1,7 @@
 package peer.channel;
 
+import peer.message.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -73,7 +75,7 @@ public abstract class ChannelListener implements Runnable {
   *
   * @param received Message received
   */
-  protected abstract void handler(String received);
+  protected abstract void handler(Message received);
 
   /**
   * Handler called when a message is received
@@ -88,7 +90,9 @@ public abstract class ChannelListener implements Runnable {
       open = false;
     }
     else {
-      handler(received);
+      // parse message
+      Message inmsg = Message.parser(received);
+      handler(inmsg);
     }
   }
 
@@ -111,8 +115,10 @@ public abstract class ChannelListener implements Runnable {
       // get received string
       String received = new String(packet.getData(), 0, packet.getLength());
 
+      // show in the terminal received message
       System.out.println(channelName + ": " + received);
 
+      // handle messag
       superHandler(received);
     }
 

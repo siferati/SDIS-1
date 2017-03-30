@@ -32,16 +32,13 @@ public class BackupChannelListener extends ChannelListener {
   }
 
   @Override
-  protected void handler(String received) {
-
-    // parse message
-    Message inmsg = Message.parser(received);
+  protected void handler(Message received) {
 
     // figure out what to do based on message type
-    switch (inmsg.getType()) {
+    switch (received.getType()) {
 
       case "PUTCHUNK":
-        StoredMessage outmsg = new StoredMessage("1.0", "2", inmsg.getFileId(), inmsg.getChunkNo());
+        StoredMessage outmsg = new StoredMessage("1.0", "2", received.getFileId(), received.getChunkNo());
 
         // generate a random delay [1-400]ms
         int delay = ThreadLocalRandom.current().nextInt(1, 401);
