@@ -45,7 +45,7 @@ public class BackupChannelListener extends ChannelListener {
         int delay = ThreadLocalRandom.current().nextInt(1, 401);
 
         // ask a messenger to deliver the message
-        ControlChannelListener.sendMessage(outmsg.toString(), delay);
+        ControlChannelListener.sendMessage(outmsg, delay);
 
         break;
 
@@ -59,7 +59,7 @@ public class BackupChannelListener extends ChannelListener {
   *
   * @param msg {@link ChannelMessenger#message}
   */
-  public static void sendMessage(String msg) {
+  public static void sendMessage(Message msg) {
     new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, 0)).start();
   }
 

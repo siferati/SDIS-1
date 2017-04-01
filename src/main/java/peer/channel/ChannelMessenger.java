@@ -1,5 +1,7 @@
 package peer.channel;
 
+import peer.message.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -18,7 +20,7 @@ public class ChannelMessenger implements Runnable {
   /** Size of packet buffer */
   protected int bufferSize;
   /** Message to send to the destination channel */
-  protected String message;
+  protected Message message;
   /** Datagram Socket */
   protected MulticastSocket socket;
   /** Inet address of destination channel */
@@ -36,13 +38,13 @@ public class ChannelMessenger implements Runnable {
   * @param message {@link #message}
   * @param delay {@link #delay}
   */
-  public ChannelMessenger(String messengerName, int channelPort, String channelAddress, int bufferSize, String message, int delay) {
+  public ChannelMessenger(String messengerName, int channelPort, String channelAddress, int bufferSize, Message message, int delay) {
 
     this.messengerName = messengerName;
     this.channelPort = channelPort;
     this.channelAddress = channelAddress;
     this.bufferSize = bufferSize;
-    this.message = message;
+    this.message = message; /*TODO HERE */
     this.delay = delay;
 
 
@@ -69,7 +71,7 @@ public class ChannelMessenger implements Runnable {
     // initialize buffer
     byte[] buffer = new byte[bufferSize];
 
-    // turn the message string into bytes
+    // turn the message string into bytes TODO
     buffer = message.getBytes();
 
     // fill packet with message

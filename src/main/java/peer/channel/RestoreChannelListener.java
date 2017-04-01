@@ -44,7 +44,7 @@ public class RestoreChannelListener extends ChannelListener {
                 GetChunkMessage outmsg = new GetChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), String.valueOf(received.getChunkNo()));
 
                 // ask a messenger to deliver the message
-                ControlChannelListener.sendMessage(outmsg.toString(), delay);
+                ControlChannelListener.sendMessage(outmsg, delay);
 
                 break;
             }
@@ -62,7 +62,7 @@ public class RestoreChannelListener extends ChannelListener {
                     // generate a random delay [1-400]ms
                     delay = ThreadLocalRandom.current().nextInt(1, 401);
                     // ask a messenger to deliver the message
-                    ControlChannelListener.sendMessage(outmsg.toString(), delay);
+                    ControlChannelListener.sendMessage(outmsg, delay);
                 }
                 else break; //nesta seccao do enunciado nao diz o que fazer, tenho que procurar melhor
 
@@ -78,7 +78,7 @@ public class RestoreChannelListener extends ChannelListener {
     *
     * @param msg {@link ChannelMessenger#message}
     */
-    public static void sendMessage(String msg) {
+    public static void sendMessage(Message msg) {
         new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, 0)).start();
     }
 

@@ -101,8 +101,6 @@ public class PutChunkMessage extends Message {
   */
   public void send() {
 
-    String msg = toString();
-
     // only allow STORED confirmations for a set time window
     // new Timer().schedule(
     //   new TimerTask() {
@@ -114,7 +112,7 @@ public class PutChunkMessage extends Message {
     // );
 
     // send message
-    BackupChannelListener.sendMessage(msg);
+    BackupChannelListener.sendMessage(this);
   }
 
   /**

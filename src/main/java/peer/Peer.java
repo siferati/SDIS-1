@@ -35,17 +35,18 @@ public class Peer {
         }
     }
 
-    /**
+    /** TODO fix closeAll
     * Closes all listeners
     */
     public static void closeAll() {
-        String msg = "exit";
+        /*String msg = "exit";
 
         ControlChannelListener.sendMessage(msg, 0);
 
         BackupChannelListener.sendMessage(msg);
 
         RestoreChannelListener.sendMessage(msg);
+        */
     }
 
     /**
@@ -58,7 +59,7 @@ public class Peer {
 
         switch (ch) {
             case "MC":
-            ControlChannelListener.sendMessage(msg, 0);
+              // ControlChannelListener.sendMessage(msg, 0);
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {
@@ -67,10 +68,10 @@ public class Peer {
             break;
             case "MDR":
             if (msg.equals("GETCHUNK")){
-                RestoreChannelListener.sendMessage(msg);
+                // RestoreChannelListener.sendMessage(msg);
             }
             else if (msg.equals("CHUNK")){
-                RestoreChannelListener.sendMessage(msg);
+                // RestoreChannelListener.sendMessage(msg);
             }
 
             break;
