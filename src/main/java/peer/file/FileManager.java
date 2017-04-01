@@ -139,28 +139,18 @@ public class FileManager {
       // read file into chunks
       while (fis.read(chunk) > 0) {
 
-        // turn bytes read into a string
-        String body = new String(chunk);
-
-        System.out.println(body.length());
-
-        System.out.println(fileId);
-
-        PutChunkMessage message = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
-
-        // get message to send to multicast channel
-        String msg = message.toString();
+        PutChunkMessage msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", chunk);
 
         // add this message to waiting "queue"
-        synchronized (ControlChannelListener.waitingConfirmation) {
+        /*synchronized (ControlChannelListener.waitingConfirmation) {
 
-          ControlChannelListener.waitingConfirmation.add(message);
+          ControlChannelListener.waitingConfirmation.add(msg);
 
-          //System.out.println(ControlChannelListener.waitingConfirmation.size());
-        }
+          System.out.println(ControlChannelListener.waitingConfirmation.size());
+        }*/
 
         // send message to MDB channel
-        message.send();
+        msg.send();
 
         // prepare next ite
         chunkNo++;
@@ -171,10 +161,10 @@ public class FileManager {
       if (filesize % CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        String msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", "").toString();
+        PutChunkMessage lastmsg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", new byte[0]).toString();
 
         // send message
-        BackupChannelListener.sendMessage(msg);
+        lastmsg.send();
       }
 
     }
