@@ -104,14 +104,14 @@ public class PutChunkMessage extends Message {
     String msg = toString();
 
     // only allow STORED confirmations for a set time window
-    new Timer().schedule(
-      new TimerTask() {
-        @Override
-        public void run() {
-          setWaiting(false);
-        }
-      }, WAITING_WINDOW
-    );
+    // new Timer().schedule(
+    //   new TimerTask() {
+    //     @Override
+    //     public void run() {
+    //       setWaiting(false);
+    //     }
+    //   }, WAITING_WINDOW
+    // );
 
     // send message
     BackupChannelListener.sendMessage(msg);

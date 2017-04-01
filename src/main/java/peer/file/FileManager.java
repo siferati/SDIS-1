@@ -14,7 +14,7 @@ import javax.xml.bind.DatatypeConverter;
 public class FileManager {
 
   /** Max size of each file chunk */
-  public static final int CHUNK_SIZE = 10;
+  public static final int CHUNK_SIZE = 64000;
 
 
   /**
@@ -142,6 +142,10 @@ public class FileManager {
         // turn bytes read into a string
         String body = new String(chunk);
 
+        System.out.println(body.length());
+
+        System.out.println(fileId);
+
         PutChunkMessage message = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
 
         // get message to send to multicast channel
@@ -152,7 +156,7 @@ public class FileManager {
 
           ControlChannelListener.waitingConfirmation.add(message);
 
-          System.out.println(ControlChannelListener.waitingConfirmation.size());
+          //System.out.println(ControlChannelListener.waitingConfirmation.size());
         }
 
         // send message to MDB channel
