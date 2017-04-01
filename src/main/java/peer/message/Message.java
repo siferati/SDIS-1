@@ -27,14 +27,15 @@ public class Message {
         this.body = body;
     }
 
-    /**
+    /** TODO fix parser
     * Parses a message (string) and returns the correspondent Message object
     *
     * @param msg Message to parse
     */
     public static Message parser(String msg) {
-
+      /*
         // <MessageType> <Version> <SenderId> <FileId> <ChunkNo> <ReplicationDeg> <CRLF><CRLF><body>
+
         // split the message to get each individual field
         String contents[] = msg.split(SPLIT_REGEX);
 
@@ -75,7 +76,8 @@ public class Message {
             break;
         }
 
-        return message;
+        return message;*/
+        return null;
     }
 
     @Override
