@@ -127,6 +127,14 @@ public class Message {
     public String getChunkNo() {
         return header.chunkNo;
     }
-  
+
+    /**
+    * Getter
+    *
+    * @return {@link MessageHeader#repDeg}
+    */
+    public String getRepDeg() {
+        return header.repDeg;
+    }
 
 }
