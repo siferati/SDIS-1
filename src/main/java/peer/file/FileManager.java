@@ -161,7 +161,7 @@ public class FileManager {
       if (filesize % CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        PutChunkMessage lastmsg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", new byte[0]).toString();
+        PutChunkMessage lastmsg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", new byte[0]);
 
         // send message
         lastmsg.send();

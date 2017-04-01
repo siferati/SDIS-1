@@ -37,7 +37,7 @@ public class PutChunkMessage extends Message {
   *
   * @see Message#Message
   */
-  public PutChunkMessage(String version, String senderId, String fileId, String chunkNo, String repDeg, String body) {
+  public PutChunkMessage(String version, String senderId, String fileId, String chunkNo, String repDeg, byte[] body) {
     super(TYPE, version, senderId, fileId, chunkNo, repDeg, body);
   }
 

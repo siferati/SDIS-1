@@ -12,7 +12,7 @@ public class Message {
     private MessageHeader header;
 
     /** Body of this message (file chunk as bytes) */
-    private String body;
+    private byte[] body;
 
     /**
     * Constructor
@@ -21,7 +21,7 @@ public class Message {
     *
     * @param body Body of this message (file chunk as bytes)
     */
-    public Message(String type, String version, String senderId, String fileId, String chunkNo, String repDeg, String body) {
+    public Message(String type, String version, String senderId, String fileId, String chunkNo, String repDeg, byte[] body) {
 
         this.header = new MessageHeader(type, version, senderId, fileId, chunkNo, repDeg);
         this.body = body;
