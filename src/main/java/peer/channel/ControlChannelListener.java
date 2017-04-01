@@ -1,5 +1,6 @@
 package peer.channel;
 
+import peer.*;
 import peer.message.*;
 
 import java.io.*;
@@ -21,7 +22,7 @@ public class ControlChannelListener extends ChannelListener {
   /** {@link ChannelListener#channelAddress} */
   public static final String CHANNEL_ADDRESS = "230.0.0.1";
   /** {@link ChannelListener#bufferSize} */
-  public static final int BUFFER_SIZE = 64 * 1024;
+  public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
   /** A synchronized arraylist holding messages waiting for STORED confirmation */
   public static ArrayList<PutChunkMessage> waitingConfirmation = new ArrayList<PutChunkMessage>(Collections.synchronizedList(new ArrayList<PutChunkMessage>()));
 

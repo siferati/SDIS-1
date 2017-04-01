@@ -11,6 +11,9 @@ import java.io.*;
 */
 public class Peer {
 
+    /** Size of packet buffer */
+    public static final int BUFFER_SIZE = 64 * 1024;
+
     /**
     * Entry point of the program
     *
