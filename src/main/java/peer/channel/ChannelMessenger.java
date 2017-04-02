@@ -71,8 +71,8 @@ public class ChannelMessenger implements Runnable {
     // initialize buffer
     byte[] buffer = new byte[bufferSize];
 
-    // turn the message string into bytes TODO
-    buffer = message.getBytes();
+    // turn the message into bytes
+    buffer = message.toBytes();
 
     // fill packet with message
     DatagramPacket packet = new DatagramPacket(buffer, buffer.length, channelInetAddress, channelPort);

@@ -1,5 +1,7 @@
 package peer.message;
 
+import peer.*;
+
 /**
 * A message to be sent. Made of an header and a body.
 */
@@ -83,6 +85,28 @@ public class Message {
     @Override
     public String toString() {
         return header.toString() + "" + body;
+    }
+
+    /**
+    * Turns this message into a byte array
+    *
+    * @return Message turned into byte aray
+    */
+    public byte[] toBytes() {
+
+      // turn header into byte[]
+      byte[] b_header = header.toString().getBytes();
+
+      // init output
+      byte[] output = new byte[Peer.BUFFER_SIZE];
+
+      // copy b_header into output
+      System.arraycopy(b_header, 0, output, 0, b_header.length);
+
+      // copy body into output
+      System.arraycopy(body, 0, output, b_header.length, body.length);
+
+      return output;
     }
 
     /**
