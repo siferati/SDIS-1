@@ -13,10 +13,6 @@ import javax.xml.bind.DatatypeConverter;
 */
 public class FileManager {
 
-  /** Max size of each file chunk */
-  public static final int CHUNK_SIZE = 64000;
-
-
   /**
   * Constructor
   */
@@ -126,7 +122,7 @@ public class FileManager {
     long filesize = file.length();
 
     // init array
-    byte[] chunk = new byte[CHUNK_SIZE];
+    byte[] chunk = new byte[Message.CHUNK_SIZE];
 
     try {
 
@@ -158,7 +154,7 @@ public class FileManager {
 
       // If the file size is a multiple of the chunk size,
       // the last chunk has size 0
-      if (filesize % CHUNK_SIZE == 0) {
+      if (filesize % Message.CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
         PutChunkMessage lastmsg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", new byte[0]);

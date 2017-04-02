@@ -1,6 +1,9 @@
 package peer.message;
 
 import peer.*;
+import javax.xml.bind.DatatypeConverter;
+
+import java.util.Arrays;
 
 /**
 * A message to be sent. Made of an header and a body.
@@ -9,6 +12,9 @@ public class Message {
 
     /** Regex used to split a message into its separate fields */
     private static final String SPLIT_REGEX = "(?:\\s|" + MessageHeader.CRLF + ")+";
+
+    /** Max size of each file chunk */
+    public static final int CHUNK_SIZE = 64000;
 
     /** Header of this message */
     private MessageHeader header;
@@ -30,16 +36,24 @@ public class Message {
     }
 
     /** TODO fix parser
-    * Parses a message (string) and returns the correspondent Message object
+    * Parses a message (byte[]) and returns the correspondent Message object
     *
     * @param msg Message to parse
     */
-    public static Message parser(String msg) {
-      /*
+    public static Message parser(byte[] msg) {
+
         // <MessageType> <Version> <SenderId> <FileId> <ChunkNo> <ReplicationDeg> <CRLF><CRLF><body>
 
-        // split the message to get each individual field
-        String contents[] = msg.split(SPLIT_REGEX);
+        // init
+        byte[] header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
+        byte[] body = new byte[CHUNK_SIZE];
+
+        // split array into header and body
+        System.arraycopy(msg, 0, header, 0, header.length);
+        System.arraycopy(msg, header.length, body, 0, body.length);
+
+        // split the header to get each individual field
+        String contents[] = new String(header).split(SPLIT_REGEX);
 
         // return object
         Message message;
@@ -49,15 +63,7 @@ public class Message {
 
             case "PUTCHUNK":
             {
-                String chunk;
-
-                if (contents.length == 7) {
-                    chunk = contents[6];
-                } else {
-                    chunk = "";
-                }
-
-                message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], chunk);
+                message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], body);
 
                 break;
             }
@@ -78,13 +84,12 @@ public class Message {
             break;
         }
 
-        return message;*/
-        return null;
+        return message;
     }
 
     @Override
     public String toString() {
-        return header.toString() + "" + body;
+        return header.toString() + "" + DatatypeConverter.printHexBinary(body);
     }
 
     /**
@@ -94,8 +99,14 @@ public class Message {
     */
     public byte[] toBytes() {
 
-      // turn header into byte[]
-      byte[] b_header = header.toString().getBytes();
+      // init header
+      byte[] b_header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
+
+      // get header bytes
+      byte[] b_header_aux = header.toString().getBytes();
+
+      // turn header bytes into fixed size byte[]
+      System.arraycopy(b_header_aux, 0, b_header, 0, b_header_aux.length);
 
       // init output
       byte[] output = new byte[Peer.BUFFER_SIZE];
@@ -161,6 +172,15 @@ public class Message {
     */
     public String getRepDeg() {
         return header.repDeg;
+    }
+
+    /**
+    * Getter
+    *
+    * @return {@link #header}
+    */
+    public MessageHeader getHeader() {
+        return header;
     }
 
 }

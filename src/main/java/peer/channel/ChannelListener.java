@@ -84,16 +84,14 @@ public abstract class ChannelListener implements Runnable {
   *
   * @param received Message received
   */
-  private final void superHandler(String received) {
+  private final void superHandler(byte[] received) {
 
-    if (received.equals("exit")) {
-      open = false;
-    }
-    else {
       // parse message
       Message inmsg = Message.parser(received);
+      // display message
+      System.out.println(channelName + ": " + inmsg.getHeader().toString());
+      // give message to subclasses
       handler(inmsg);
-    }
   }
 
   @Override
@@ -112,14 +110,11 @@ public abstract class ChannelListener implements Runnable {
         System.out.println(channelName + ": Error receiving packet from socket: " + e);
       }
 
-      // get received string
-      String received = new String(packet.getData(), 0, packet.getLength());
+      // get received data
+      byte[] packetData = packet.getData();
 
-      // show in the terminal received message
-      System.out.println(channelName + ": " + received);
-
-      // handle messag
-      superHandler(received);
+      // handle message
+      superHandler(packetData);
     }
 
     // end communications
