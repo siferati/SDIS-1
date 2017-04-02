@@ -11,8 +11,8 @@ import java.io.*;
 */
 public class Peer {
 
-    /** Size of packet buffer */
-    public static final int BUFFER_SIZE = 64 * 1024;
+    /** Size of packet buffer. The practical limit for the data length which is imposed by the underlying IPv4 protocol is 65,507 bytes (65,535 − 8 byte UDP header − 20 byte IP header) */
+    public static final int BUFFER_SIZE = 65507;
 
     /**
     * Entry point of the program
