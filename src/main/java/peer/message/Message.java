@@ -68,6 +68,11 @@ public class Message {
                 message = new GetChunkMessage(contents[1], contents[2], contents[3], contents[4]);
                 break;
             }
+            case "CHUNK":
+            {
+                message = new ChunkMessage("1.0", "1", "2", "3","bodybody".getBytes());
+                break;
+            }
             default:
             {
                 message = null;
@@ -127,6 +132,16 @@ public class Message {
     public String getChunkNo() {
         return header.chunkNo;
     }
-  
+
+    /**
+    * Setter
+    *
+    */
+    public void setBody(byte[] b) {
+        String sb = new String(b);
+
+        this.body = sb;
+    }
+
 
 }
