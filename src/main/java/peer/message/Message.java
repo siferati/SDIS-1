@@ -134,6 +134,7 @@ public class Message {
     }
 
     /**
+
     * Setter
     *
     */
@@ -141,6 +142,15 @@ public class Message {
         String sb = new String(b);
 
         this.body = sb;
+    }
+
+
+    * Getter
+    *
+    * @return {@link MessageHeader#repDeg}
+    */
+    public String getRepDeg() {
+        return header.repDeg;
     }
 
 
