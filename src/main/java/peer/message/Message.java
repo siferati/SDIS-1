@@ -3,8 +3,6 @@ package peer.message;
 import peer.*;
 import javax.xml.bind.DatatypeConverter;
 
-import java.util.Arrays;
-
 /**
 * A message to be sent. Made of an header and a body.
 */
@@ -53,7 +51,8 @@ public class Message {
         System.arraycopy(msg, header.length, body, 0, body.length);
 
         // split the header to get each individual field
-        String contents[] = new String(header).split(SPLIT_REGEX);
+        // .trim() removes null bytes from empty space in byte[]
+        String contents[] = new String(header).trim().split(SPLIT_REGEX);
 
         // return object
         Message message;
