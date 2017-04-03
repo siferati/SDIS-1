@@ -144,7 +144,7 @@ public class Message {
         this.body = sb;
     }
 
-
+    /*
     * Getter
     *
     * @return {@link MessageHeader#repDeg}
