@@ -88,8 +88,9 @@ public abstract class ChannelListener implements Runnable {
 
       // parse message
       Message inmsg = Message.parser(received);
+
       // display message
-      System.out.println(channelName + ": " + inmsg.getHeader().toString());
+      System.out.println(channelName + ": " + inmsg.getHeader().toString() + " -> " + inmsg.getBodyLength() + " bytes");
       // give message to subclasses
       handler(inmsg);
   }

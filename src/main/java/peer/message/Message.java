@@ -77,6 +77,11 @@ public class Message {
                 message = new GetChunkMessage(contents[1], contents[2], contents[3], contents[4]);
                 break;
             }
+            case "CHUNK":
+            {
+                message = new ChunkMessage("1.0", "1", "2", "3","bodybody".getBytes());
+                break;
+            }
             default:
             {
                 message = null;
@@ -165,7 +170,7 @@ public class Message {
         return header.chunkNo;
     }
 
-    /**
+    /*
     * Getter
     *
     * @return {@link MessageHeader#repDeg}
@@ -183,4 +188,19 @@ public class Message {
         return header;
     }
 
+    /**
+    * Getter
+    *
+    * @return Body byte[] length
+    */
+    public int getBodyLength() {
+
+      int length = 0;
+      for (byte b: body) {
+        if (b != 0) {
+          length++;
+        }
+      }
+      return length;
+    }
 }

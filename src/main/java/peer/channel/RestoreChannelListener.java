@@ -4,6 +4,7 @@ import peer.*;
 import peer.message.*;
 
 import java.io.*;
+import java.nio.file.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -50,23 +51,37 @@ public class RestoreChannelListener extends ChannelListener {
             }
             case "CHUNK": //outros peers veem se tem um chunk e mandam para MDR
             {
-                String fileId = received.getFileId();
-                String chunkNo = received.getChunkNo();
-                String fileName = fileId + "-" + chunkNo;
 
-                File chunk = new File(fileName);
+                try{
+                        int chunkIndex = getChunkIndex(received.getChunkNo());
 
-                if(chunk.exists()){
-                    ChunkMessage outmsg = new ChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo());
+                        if(chunkIndex > -1){
+                            //chunk presente no peer. ir buscar body:
 
-                    // generate a random delay [1-400]ms
-                    delay = ThreadLocalRandom.current().nextInt(1, 401);
-                    // ask a messenger to deliver the message
-                    ControlChannelListener.sendMessage(outmsg, delay);
-                }
-                else break; //nesta seccao do enunciado nao diz o que fazer, tenho que procurar melhor
+                            String filePath = "chunks/" + received.getFileId() + "-" + received.getChunkNo() + ".chk";
+                            File chunk = new File(filePath);
 
+                            if(chunk.exists()){ //so para ter a certeza
 
+                                byte[] body = Files.readAllBytes(Paths.get(filePath));
+
+                                ChunkMessage outmsg = new ChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo(), body);
+
+                                // generate a random delay [1-400]ms
+                                delay = ThreadLocalRandom.current().nextInt(1, 401);
+                                // ask a messenger to deliver the message
+                                ControlChannelListener.sendMessage(outmsg, delay);
+                            }
+                        }
+                        else{ //peer nao tem o body
+                            break;
+                        }
+
+                    }
+                    catch(Exception e){
+                        System.out.println("RestoreChannelListener for CHUNK: " +e);
+                    }
+                break;
             }
             default:
             break;
@@ -82,4 +97,38 @@ public class RestoreChannelListener extends ChannelListener {
         new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, 0)).start();
     }
 
+    /**
+    * Look for chunkNo in list of chunkNos stored in this peer
+    *
+    * @param chunkNo chunk number to look for
+    *
+    * @return index of chunkNo in array of chunkNos or -1 if not found
+    */
+    public int getChunkIndex(String chunkNo){
+        int chunkIndex = -1;
+
+        try{
+            //cena falsa para por chunks para poder ler
+            Integer[] chunks = {1,43,2,143,23,87,4,8,3};
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
+            outputStream.writeObject(chunks);
+            //fim da cena falsa
+
+
+            //ler chunkIds do peer
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkList.txt"));
+            Integer[] chunksNosInThisPeer = (Integer[])inputStream.readObject();
+
+            //procurar chunkNo nos chunkNos deste peer
+            List<Integer> chunkList = Arrays.asList(chunksNosInThisPeer);
+            chunkIndex = chunkList.indexOf(Integer.valueOf(chunkNo));
+
+
+        }
+        catch(Exception e){
+            System.out.println("RestoreChannelListener > getChunkIndex: " +e);
+        }
+
+        return chunkIndex;
+    }
 }
