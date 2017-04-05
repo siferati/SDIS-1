@@ -68,10 +68,12 @@ public class Peer {
             break;
             case "MDR":
             if (msg.equals("GETCHUNK")){
-                // RestoreChannelListener.sendMessage(msg);
+                GetChunkMessage message = new GetChunkMessage("1.0", "1", "A1B2C3", "0");
+                RestoreChannelListener.sendMessage(message);
             }
             else if (msg.equals("CHUNK")){
-                // RestoreChannelListener.sendMessage(msg);
+              ChunkMessage message = new ChunkMessage("1.0", "1", "A1B2C3", "0", "faky".getBytes());
+              RestoreChannelListener.sendMessage(message);
             }
 
             break;

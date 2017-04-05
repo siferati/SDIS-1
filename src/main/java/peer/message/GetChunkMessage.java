@@ -6,7 +6,7 @@ package peer.message;
 public class GetChunkMessage extends Message {
 
   /** {@link MessageHeader#type} */
-  private static final String TYPE = "GET";
+  private static final String TYPE = "GETCHUNK";
 
   /**
   * Constructor
