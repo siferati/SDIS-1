@@ -33,7 +33,7 @@ public class Message {
         this.body = body;
     }
 
-    /** TODO fix parser
+    /**
     * Parses a message (byte[]) and returns the correspondent Message object
     *
     * @param msg Message to parse
