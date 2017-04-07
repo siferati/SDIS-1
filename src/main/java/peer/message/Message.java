@@ -2,6 +2,7 @@ package peer.message;
 
 import peer.*;
 import javax.xml.bind.DatatypeConverter;
+import java.util.Arrays;
 
 /**
 * A message to be sent. Made of an header and a body.
@@ -44,11 +45,16 @@ public class Message {
 
         // init
         byte[] header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
+
+        // byte[] -> string -> length + 2* CRLF.length
+        int header_length = new String(msg).split(MessageHeader.CRLF)[0].length() + 2 * MessageHeader.CRLF.length();
+
+        // init
         byte[] body = new byte[CHUNK_SIZE];
 
         // split array into header and body
-        System.arraycopy(msg, 0, header, 0, header.length);
-        System.arraycopy(msg, header.length, body, 0, body.length);
+        System.arraycopy(msg, 0, header, 0, header_length);
+        System.arraycopy(msg, header_length, body, 0, body.length);
 
         // split the header to get each individual field
         // .trim() removes null bytes from empty space in byte[]
@@ -103,14 +109,8 @@ public class Message {
     */
     public byte[] toBytes() {
 
-      // init header
-      byte[] b_header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
-
       // get header bytes
-      byte[] b_header_aux = header.toString().getBytes();
-
-      // turn header bytes into fixed size byte[]
-      System.arraycopy(b_header_aux, 0, b_header, 0, b_header_aux.length);
+      byte[] b_header = header.toString().getBytes();
 
       // init output
       byte[] output = new byte[Peer.BUFFER_SIZE];

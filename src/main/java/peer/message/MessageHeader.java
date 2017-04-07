@@ -23,7 +23,7 @@ public class MessageHeader {
   /** Desired replication degree of the chunk */
   public String repDeg;
   /** Line terminator */
-  public static final String CRLF = "0xD0xA";
+  public static final String CRLF = Character.toString((char)13) + Character.toString((char)10);
 
   /**
   * Constructor
@@ -49,5 +49,9 @@ public class MessageHeader {
   @Override
   public String toString() {
     return type + " " + version + " " + senderId + " " + fileId + " " + chunkNo + " " + repDeg + " " + CRLF + CRLF;
+  }
+
+  public String print() {
+    return type + " " + version + " " + senderId + " " + fileId + " " + chunkNo + " " + repDeg;
   }
 }
