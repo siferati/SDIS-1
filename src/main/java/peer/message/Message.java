@@ -207,15 +207,6 @@ public class Message {
       }
       return length;
     }
-    /**
 
-    * Setter
-    *
-    */
-    public void setBody(byte[] b) {
-        String sb = new String(b);
-
-        this.body = sb;
-    }
 
 }

@@ -17,9 +17,9 @@ public class DeleteMessage extends Message {
   */
   public DeleteMessage(String version, String senderId, String fileId, String chunkNo, byte[] body) {
 
-      super(TYPE, version, senderId, fileId, "", "", "");
+      super(TYPE, version, senderId, fileId, "", "", body);
 
-      this.setBody(body);
+     // this.setBody(body);
 
 
 
