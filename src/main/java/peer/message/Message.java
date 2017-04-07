@@ -190,16 +190,19 @@ public class Message {
     /**
     * Getter
     *
-    * @return Body byte[] length
+    * @return Length of body (byte[])
     */
     public int getBodyLength() {
 
-      int length = 0;
-      for (byte b: body) {
-        if (b != 0) {
-          length++;
+      int i;
+      for (i = body.length - 1; i > 0; i--) {
+        if (body[i] != 0 || body[i - 1] != 0) {
+          break;
         }
       }
-      return length;
+      if (i < 0 || i == body.length - 1) {
+        i++;
+      }
+      return i;
     }
 }
