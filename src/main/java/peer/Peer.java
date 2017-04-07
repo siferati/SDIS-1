@@ -60,6 +60,10 @@ public class Peer {
         switch (ch) {
             case "MC":
               // ControlChannelListener.sendMessage(msg, 0);
+              if (msg.equals("DELETE")) {
+                  DeleteMessage message = new DeleteMessage("1.0", "1", "A1B2C3");
+                  ControlChannelListener.sendMessage(message, 0);
+              }
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {

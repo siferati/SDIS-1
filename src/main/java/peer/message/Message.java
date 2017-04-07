@@ -78,12 +78,12 @@ public class Message {
             }
             case "CHUNK":
             {
-                message = new ChunkMessage("1.0", "1", "2", "3","bodybody".getBytes());
+                message = new ChunkMessage("1.0", "1", "A1B2C3", "24","fake".getBytes());
                 break;
             }
             case "DELETE":
             {
-                message = new DeleteMessage("1.0", "1", "2", "","fake".getBytes());
+                message = new DeleteMessage("1.0", "1", "A1B2C3");
                 break;
             }
             default:

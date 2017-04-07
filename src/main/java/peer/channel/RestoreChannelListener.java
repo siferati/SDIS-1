@@ -53,12 +53,15 @@ public class RestoreChannelListener extends ChannelListener {
             {
 
                 try{
-                        int chunkIndex = getChunkIndex(received.getChunkNo());
+                        String fileName = received.getFileId() + "-" + received.getChunkNo();
+                        int chunkIndex = getChunkIndex(fileName);
+System.out.println("index: " + chunkIndex);
 
                         if(chunkIndex > -1){
                             //chunk presente no peer. ir buscar body:
 
-                            String filePath = "chunks/" + received.getFileId() + "-" + received.getChunkNo() + ".chk";
+
+                            String filePath = "chunks/" + fileName + ".chk";
                             File chunk = new File(filePath);
 
                             if(chunk.exists()){ //so para ter a certeza
@@ -72,6 +75,7 @@ public class RestoreChannelListener extends ChannelListener {
                                 // ask a messenger to deliver the message
                                 ControlChannelListener.sendMessage(outmsg, delay);
                             }
+
                         }
                         else{ //peer nao tem o body
                             break;
@@ -104,12 +108,12 @@ public class RestoreChannelListener extends ChannelListener {
     *
     * @return index of chunkNo in array of chunkNos or -1 if not found
     */
-    public int getChunkIndex(String chunkNo){
+    public int getChunkIndex(String fileName){
         int chunkIndex = -1;
 
         try{
             //cena falsa para por chunks para poder ler
-            Integer[] chunks = {1,43,2,143,23,87,4,8,3};
+            String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
             outputStream.writeObject(chunks);
             //fim da cena falsa
@@ -117,11 +121,13 @@ public class RestoreChannelListener extends ChannelListener {
 
             //ler chunkIds do peer
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkList.txt"));
-            Integer[] chunksNosInThisPeer = (Integer[])inputStream.readObject();
+            String[] chunksNosInThisPeer = (String[])inputStream.readObject();
 
             //procurar chunkNo nos chunkNos deste peer
-            List<Integer> chunkList = Arrays.asList(chunksNosInThisPeer);
-            chunkIndex = chunkList.indexOf(Integer.valueOf(chunkNo));
+            List<String> chunkList = Arrays.asList(chunksNosInThisPeer);
+
+            String noTxt = fileName.replace(".txt", "");
+            chunkIndex = chunkList.indexOf(noTxt);
 
 
         }
