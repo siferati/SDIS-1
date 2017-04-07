@@ -29,9 +29,6 @@ public class PutChunkMessage extends Message {
   /** Max number of times a message can be resent */
   public static final int MAX_NRESENDS = 4;
 
-  /** Reference for Time object. Needed to call cancel() */
-  private Timer timer;
-
   /** List of server ids that have stored this message (chunk) */
   private ArrayList<String> savers = new ArrayList<String>();
 
@@ -104,30 +101,22 @@ public class PutChunkMessage extends Message {
   */
   public void send() {
 
-    // save a reference for timer to cancel() later
-    timer = new Timer();
-    
+    // save a reference for timer to cancel() it
+    Timer timer = new Timer();
+
     // only allow STORED confirmations for a set time window
     timer.schedule(
       new TimerTask() {
         @Override
         public void run() {
-          closeWaitingWindow();
+          setWaiting(false);
+          timer.cancel();
         }
       }, WAITING_WINDOW
     );
 
     // send message
     BackupChannelListener.sendMessage(this);
-  }
-
-  /**
-  * Stops checking for STORED messages and
-  * cancels the timer called in {@link #send}
-  */
-  public void closeWaitingWindow() {
-    setWaiting(false);
-    timer.cancel();
   }
 
   /**
