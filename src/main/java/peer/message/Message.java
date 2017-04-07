@@ -81,6 +81,11 @@ public class Message {
                 message = new ChunkMessage("1.0", "1", "2", "3","bodybody".getBytes());
                 break;
             }
+            case "DELETE":
+            {
+                message = new DeleteMessage("1.0", "1", "2", "","fake".getBytes());
+                break;
+            }
             default:
             {
                 message = null;
@@ -202,4 +207,15 @@ public class Message {
       }
       return length;
     }
+    /**
+
+    * Setter
+    *
+    */
+    public void setBody(byte[] b) {
+        String sb = new String(b);
+
+        this.body = sb;
+    }
+
 }
