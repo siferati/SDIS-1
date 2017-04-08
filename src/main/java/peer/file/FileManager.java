@@ -185,11 +185,14 @@ public class FileManager {
 
     String filepath = msg.getChunkPath();
 
-    System.out.println("Storing chunk " + filepath);
+    // create a byte[] to store only the actual content of the chunk
+    byte[] content = new byte[msg.getBodyLength()];
+
+    System.arraycopy(msg.getBody(), 0, content, 0, content.length);
 
     try {
       FileOutputStream out = new FileOutputStream(filepath);
-      out.write(msg.getBody());
+      out.write(content);
       out.close();
     }
     catch (Exception e) {
