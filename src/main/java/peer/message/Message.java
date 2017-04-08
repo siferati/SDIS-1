@@ -190,6 +190,25 @@ public class Message {
     /**
     * Getter
     *
+    * @return {@link #body}
+    */
+    public byte[] getBody() {
+        return body;
+    }
+
+    /**
+    * Returns the filepath to store/load this chunk
+    *
+    * @return Filepath to store/load this chunk
+    */
+    public String getChunkPath() {
+
+        return "chunks/" + header.fileId + "-" + header.chunkNo + ".chk";
+    }
+
+    /**
+    * Getter
+    *
     * @return Length of body (byte[])
     */
     public int getBodyLength() {

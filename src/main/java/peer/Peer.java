@@ -66,7 +66,7 @@ public class Peer {
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {
-                backup("testing/img.png");
+                backup("testing/file.txt");
             }
             break;
             case "MDR":

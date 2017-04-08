@@ -175,4 +175,25 @@ public class FileManager {
     }
 
   }
+
+  /** TODO create subfolder with server id as its name and store chunks in it
+  * Stores the chunk cointained in the msg
+  *
+  * @param msg Message containing the chunk to store
+  */
+  public void store(Message msg) {
+
+    String filepath = msg.getChunkPath();
+
+    System.out.println("Storing chunk " + filepath);
+
+    try {
+      FileOutputStream out = new FileOutputStream(filepath);
+      out.write(msg.getBody());
+      out.close();
+    }
+    catch (Exception e) {
+      System.out.println("FileManager: Error storing chunk " + filepath);
+    }
+  }
 }
