@@ -131,11 +131,18 @@ public class FileManager {
       String fileId = getFileId(filepath);
 
       int chunkNo = 0;
+      int nread = 0;
 
       // read file into chunks
-      while (fis.read(chunk) > 0) {
+      while ((nread = fis.read(chunk)) > 0) {
 
-        PutChunkMessage msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", chunk);
+        // ignore trailing garbage left by read
+        byte[] body = new byte[nread];
+
+        // TODO make sure this is correct. read was leaving last bytes with garbage?
+        System.arraycopy(chunk, 0, body, 0, nread);
+
+        PutChunkMessage msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
 
         // add this message to waiting "queue"
         /*synchronized (ControlChannelListener.waitingConfirmation) {
@@ -162,6 +169,8 @@ public class FileManager {
         // send message
         lastmsg.send();
       }
+
+      fis.close();
 
     }
     catch (Exception e) {
