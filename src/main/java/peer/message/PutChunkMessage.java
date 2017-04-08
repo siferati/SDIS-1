@@ -14,8 +14,11 @@ public class PutChunkMessage extends Message {
   /** {@link MessageHeader#type} */
   public static final String TYPE = "PUTCHUNK";
 
-  /** Ammount of time (in milliseconds) to wait for STORED confirmations */
-  public static int WAITING_WINDOW = 1000;
+  /** Initial ammount of time (in milliseconds) to wait for STORED confirmations */
+  public static final int WAITING_WINDOW = 1000;
+
+  /** The actual {@link #WAITING_WINDOW}, taking into account resends, etc */
+  private int actualWaitingWindow = WAITING_WINDOW;
 
   /** TRUE if still waiting for STORED confirmations */
   public boolean waiting = true;
@@ -83,9 +86,11 @@ public class PutChunkMessage extends Message {
       waiting = true;
 
       // double time window
-      WAITING_WINDOW = WAITING_WINDOW * 2;
+      actualWaitingWindow = actualWaitingWindow * 2;
 
       nresends++;
+
+      System.out.println(header.chunkNo + ": Resending message! #" + nresends + " t" + actualWaitingWindow);
 
       send();
 
@@ -93,6 +98,47 @@ public class PutChunkMessage extends Message {
     }
     else {
       return false;
+    }
+  }
+
+  /**
+  * Called when time window for waiting is over.
+  * Checks if there's a need to resend the message
+  * based on te actualRepDeg
+  */
+  public void checkRepDeg() {
+
+    // only act if waiting window is over
+    // this shouldn't be needed, but just in case
+    if (!waiting) {
+
+      synchronized (ControlChannelListener.waitingConfirmation) {
+
+        // if rep deg was achieved
+        if (getActualRepDeg() >= Integer.parseInt(getRepDeg())) {
+
+          System.out.println(header.chunkNo + ": RepDeg was achieved, removing message from waiting queue!");
+
+          // remove this message from the "queue"
+          ControlChannelListener.waitingConfirmation.remove(this);
+          }
+        else {
+
+          // send message again, this time doubling the time window
+          if (!resend()) {
+
+            System.out.println(header.chunkNo + ": RepDeg was NOT achieved and max attempts timedout!");
+
+            // if max attempts to resend were achieved
+            // remove this message from the "queue"
+            ControlChannelListener.waitingConfirmation.remove(this);
+          }
+        }
+
+        if (ControlChannelListener.waitingConfirmation.size() == 0) {
+          System.out.println("Queue is empty!");
+        }
+      }
     }
   }
 
@@ -110,9 +156,10 @@ public class PutChunkMessage extends Message {
         @Override
         public void run() {
           setWaiting(false);
+          checkRepDeg();
           timer.cancel();
         }
-      }, WAITING_WINDOW
+      }, actualWaitingWindow
     );
 
     // send message

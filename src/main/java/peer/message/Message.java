@@ -16,7 +16,7 @@ public class Message {
     public static final int CHUNK_SIZE = 64000;
 
     /** Header of this message */
-    private MessageHeader header;
+    protected MessageHeader header;
 
     /** Body of this message (file chunk as bytes) */
     private byte[] body;

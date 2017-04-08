@@ -145,12 +145,9 @@ public class FileManager {
         PutChunkMessage msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
 
         // add this message to waiting "queue"
-        /*synchronized (ControlChannelListener.waitingConfirmation) {
-
+        synchronized (ControlChannelListener.waitingConfirmation) {
           ControlChannelListener.waitingConfirmation.add(msg);
-
-          System.out.println(ControlChannelListener.waitingConfirmation.size());
-        }*/
+        }
 
         // send message to MDB channel
         msg.send();
