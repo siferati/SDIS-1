@@ -8,6 +8,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Collections;
+
 
 
 /**
@@ -39,8 +41,8 @@ public class BackupChannelListener extends ChannelListener {
     // figure out what to do based on message type
     switch (received.getType()) {
 
-      case "PUTCHUNK":
-        StoredMessage outmsg = new StoredMessage("1.0", "2", received.getFileId(), received.getChunkNo());
+      case "PUTCHUNK":{
+        StoredMessage outmsg = new StoredMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo());
 
         // generate a random delay [1-400]ms
         int delay = ThreadLocalRandom.current().nextInt(1, 401);
@@ -52,8 +54,8 @@ public class BackupChannelListener extends ChannelListener {
         new FileManager().store(received);
 
         break;
-
-      default:
+        }
+        default:
         break;
     }
   }
@@ -67,4 +69,4 @@ public class BackupChannelListener extends ChannelListener {
     new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, 0)).start();
   }
 
-}
+  }

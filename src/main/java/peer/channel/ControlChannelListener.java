@@ -89,6 +89,40 @@ public class ControlChannelListener extends ChannelListener {
 
         break;
 
+      case "DELETE":{
+
+          try{
+
+              File dir = new File("testing/");
+
+              File[] matches = dir.listFiles(new FilenameFilter()
+              {
+                public boolean accept(File dir, String name)
+                {
+                   return name.startsWith(received.getFileId()) && name.endsWith(".txt");
+                }
+              });
+
+
+
+                 for(int i = 0; i < matches.length; i++)
+                  {
+                      matches[i].delete();
+                  }
+
+                      removeFromPeerChunks(matches);
+
+
+
+
+          }
+          catch(Exception e){
+              System.out.println("ControlChannelListener for CHUNK: " +e);
+          }
+          break;
+
+      }
+
       default:
         break;
     }
@@ -103,5 +137,45 @@ public class ControlChannelListener extends ChannelListener {
   public static void sendMessage(Message msg, int delay) {
     new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, delay)).start();
   }
+
+  public void removeFromPeerChunks(File[] chunkFiles){
+
+      try{
+          //cena falsa para por chunks para poder ler
+          String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
+          outputStream.writeObject(chunks);
+          //fim da cena falsa
+
+          //ler chunkIds do peer
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkList.txt"));
+          String[] chunksNosInThisPeer = (String[])inputStream.readObject();
+
+          //procurar chunkNo nos chunkNos deste peer
+          List<String> chunkList = new LinkedList<String>(Arrays.asList(chunksNosInThisPeer));
+          //int chunkIndex = chunkList.indexOf(fileIdChunkNo);
+
+
+            for(int i = 0; i < chunkFiles.length; i++)
+          {
+            String noTxt = chunkFiles[i].getName().replace(".txt", "");
+              chunkList.remove(noTxt);
+          }
+
+         // Integer[] newChunks = chunkList.toArray(new Arrays[chunkList.size()]);
+
+         String[] newChunks = chunkList.stream().toArray(String[]::new);
+
+          outputStream.writeObject(newChunks);
+
+      }
+      catch(Exception e){
+          System.out.println("BackupChannelListener for DELETE: " +e);
+      }
+
+  }
+
+
+
 
 }
