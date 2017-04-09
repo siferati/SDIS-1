@@ -87,10 +87,18 @@ public class ControlChannelListener extends ChannelListener {
               msg.checkRepDeg();
             }
           }
+
+
+        break;}
+        case "GETCHUNK": //iniciator peer manda msg getchunk para MC
+        {
+            GetChunkMessage outmsg = new GetChunkMessage(received.getFileId(), String.valueOf(received.getChunkNo()));
+
+            // ask a messenger to deliver the message
+            ControlChannelListener.sendMessage(outmsg, delay);
+
+            break;
         }
-
-        break;
-
       case "DELETE":{
 
           try{

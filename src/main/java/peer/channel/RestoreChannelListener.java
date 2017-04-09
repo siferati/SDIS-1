@@ -40,15 +40,6 @@ public class RestoreChannelListener extends ChannelListener {
 
         // figure out what to do based on message type
         switch (received.getType()) {
-            case "GETCHUNK": //iniciator peer manda msg getchunk para MC
-            {
-                GetChunkMessage outmsg = new GetChunkMessage(received.getFileId(), String.valueOf(received.getChunkNo()));
-
-                // ask a messenger to deliver the message
-                ControlChannelListener.sendMessage(outmsg, delay);
-
-                break;
-            }
             case "CHUNK": //outros peers veem se tem um chunk e mandam para MDR
             {
 
