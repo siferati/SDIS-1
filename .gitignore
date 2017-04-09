@@ -2,3 +2,4 @@
 bin/
 build/
 *.chk
+testing/currentInfo.txt
