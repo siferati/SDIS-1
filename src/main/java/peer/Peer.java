@@ -116,7 +116,7 @@ public class Peer {
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {
-                backup("testing/file.txt");
+                backup("testing/file.txt", "" + 2);
             }
             break;
             case "MDR":
@@ -138,7 +138,7 @@ public class Peer {
     /**
     * @see FileManager#backup
     */
-    public static void backup(String filepath) {
-        new FileManager().backup(filepath);
+    public static void backup(String filepath, String repDeg) {
+        new FileManager().backup(filepath, repDeg);
     }
 }
