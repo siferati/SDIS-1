@@ -118,6 +118,10 @@ public class Peer {
                   RemovedMessage message = new RemovedMessage("A1B2C3", "24");
                   ControlChannelListener.sendMessage(message, 0);
               }
+              if (msg.equals("GETCHUNK")){
+                  GetChunkMessage message = new GetChunkMessage("A1B2C3", "0");
+                  RestoreChannelListener.sendMessage(message);
+              }
               if (msg.equals("TEST_INFO_UPDATE")) {
                   new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
                  // ControlChannelListener.sendMessage(message, 0);
@@ -129,10 +133,6 @@ public class Peer {
             }
             break;
             case "MDR":
-            if (msg.equals("GETCHUNK")){
-                GetChunkMessage message = new GetChunkMessage("A1B2C3", "0");
-                RestoreChannelListener.sendMessage(message);
-            }
             else if (msg.equals("CHUNK")){
               ChunkMessage message = new ChunkMessage("A1B2C3", "0", "faky".getBytes());
               RestoreChannelListener.sendMessage(message);
