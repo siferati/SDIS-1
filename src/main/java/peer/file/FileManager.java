@@ -2,6 +2,8 @@ package peer.file;
 
 import peer.channel.*;
 import peer.message.*;
+import peer.*;
+
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
@@ -178,7 +180,7 @@ public class FileManager {
 
   }
 
-  /** TODO create subfolder with server id as its name and store chunks in it
+  /**
   * Stores the chunk cointained in the msg
   *
   * @param msg Message containing the chunk to store
@@ -198,7 +200,7 @@ public class FileManager {
       out.close();
     }
     catch (Exception e) {
-      System.out.println("FileManager: Error storing chunk " + filepath);
+      System.out.println("FileManager: Error storing chunk " + filepath + ": " + e);
     }
   }
 
