@@ -64,6 +64,14 @@ public class Peer {
                   DeleteMessage message = new DeleteMessage("1.0", "1", "A1B2C3");
                   ControlChannelListener.sendMessage(message, 0);
               }
+              if (msg.equals("REMOVED")) {
+                  RemovedMessage message = new RemovedMessage("1.0", "1", "A1B2C3", "24");
+                  ControlChannelListener.sendMessage(message, 0);
+              }
+              if (msg.equals("TEST_INFO_UPDATE")) {
+                  Message.addChunkInfoToFile("1", "1", "Affw2C3", "24", "5");
+                 // ControlChannelListener.sendMessage(message, 0);
+              }
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {

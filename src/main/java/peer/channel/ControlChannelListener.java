@@ -6,7 +6,9 @@ import peer.message.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.nio.file.*;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
 * Peer thread to listen to the multicast control channel (MC)
@@ -89,23 +91,18 @@ public class ControlChannelListener extends ChannelListener {
 
                  File[] matches = dir.listFiles(new FilenameFilter()
                  {
-                   public boolean accept(File dir, String name)
-                   {
-                      return name.startsWith(received.getFileId()) && name.endsWith(".txt");
-                   }
+                     public boolean accept(File dir, String name)
+                     {
+                         return name.startsWith(received.getFileId()) && name.endsWith(".txt");
+                     }
                  });
 
+                 for(int i = 0; i < matches.length; i++)
+                 {
+                     matches[i].delete();
+                 }
 
-
-                    for(int i = 0; i < matches.length; i++)
-                     {
-                         matches[i].delete();
-                     }
-
-                         removeFromPeerChunks(matches);
-
-
-
+                 removeFromPeerChunks(matches);
 
              }
              catch(Exception e){
@@ -115,7 +112,13 @@ public class ControlChannelListener extends ChannelListener {
 
          }
 
-       default:
+         case "REMOVED":{
+
+             updateLocalChunkCount(received.getFileId());
+
+         }
+
+         default:
          break;
      }
 }
@@ -130,7 +133,7 @@ public class ControlChannelListener extends ChannelListener {
     new Thread(new ChannelMessenger(MESSENGER_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE, msg, delay)).start();
   }
 
-  public void removeFromPeerChunks(File[] chunkFiles){
+  public void removeFromPeerChunks(File[] chunkFiles){ // eliminar todas as ocurrencias de chunks com um certo fileid do ficheiro com info dos chunks guardados
 
       try{
           //cena falsa para por chunks para poder ler
@@ -148,15 +151,15 @@ public class ControlChannelListener extends ChannelListener {
           //int chunkIndex = chunkList.indexOf(fileIdChunkNo);
 
 
-            for(int i = 0; i < chunkFiles.length; i++)
+          for(int i = 0; i < chunkFiles.length; i++)
           {
-            String noTxt = chunkFiles[i].getName().replace(".txt", "");
+              String noTxt = chunkFiles[i].getName().replace(".txt", "");
               chunkList.remove(noTxt);
           }
 
-         // Integer[] newChunks = chunkList.toArray(new Arrays[chunkList.size()]);
+          // Integer[] newChunks = chunkList.toArray(new Arrays[chunkList.size()]);
 
-         String[] newChunks = chunkList.stream().toArray(String[]::new);
+          String[] newChunks = chunkList.stream().toArray(String[]::new);
 
           outputStream.writeObject(newChunks);
 
@@ -167,6 +170,114 @@ public class ControlChannelListener extends ChannelListener {
 
   }
 
+  public void updateLocalChunkCount(String fileID){
+
+
+      try{
+          //cena falsa para por chunks para poder ler
+          String[] senderId_fileId_chunkNo_intendedRepDeg_actualRepdeg = {"2-ER23R5-2-3-3","1-A1B2C3-24-2-2","1-A1B2C3--2-2-2","2-6THF76-43-1-1","4-KL999H-785-3-3","6-JUSNWW-245-2-2","5-YH65SD-1-4-3","5-LA89DH-23-1-1","2-7UUUYU-34-3-3"};
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
+          outputStream.writeObject(senderId_fileId_chunkNo_intendedRepDeg_actualRepdeg);
+          //fim da cena falsa
+
+          //ler chunkIds do peer
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
+          String[] currentInfo = (String[])inputStream.readObject();
+
+          List<String> infoList = new LinkedList<String>(Arrays.asList(currentInfo));
+
+          for(int i = 0; i < infoList.size(); i++)
+          {
+              String[] tmpInfo = infoList.get(i).split("-");
+
+              //System.out.println("tmp senderID: "+tmpInfo[0]+" tmp fileId: "+tmpInfo[1]+" tmp chunkno: "+tmpInfo[2]+" tmp des rep: "+tmpInfo[3]+" tmp act rep: "+tmpInfo[4]+ " / fileID: "+ fileID);
+
+              if(fileID.equals( tmpInfo[1] )){
+
+                  String infoChunkNo = tmpInfo[2];
+                  int desiredRep = Integer.parseInt(tmpInfo[3]);
+                  int currRep = Integer.parseInt(tmpInfo[4]);
+                  currRep--;
+
+                  //atualizar o array de info de chunks
+                  tmpInfo[4] = "" + currRep;
+                  String newChunkInfo = tmpInfo[0]+"-"+tmpInfo[1]+"-"+tmpInfo[2]+"-"+tmpInfo[3]+"-"+tmpInfo[4];
+                  infoList.set(i, newChunkInfo);
+                  //eliminar este .chk
+                 // deleteChunkFile(fileID, infoChunkNo);
+                  //eliminar da lista de chunks guardados
+                 // tmpInfo.remove(i);
+
+                 if(currRep < desiredRep){
+
+                     //ler body
+                    byte[] body = getChunkBody(fileID, infoChunkNo);
+
+                      //send PUTCHUNK
+                      PutChunkMessage outmsg = new PutChunkMessage("1.0", tmpInfo[0], tmpInfo[1], tmpInfo[2], tmpInfo[3], body);
+
+                      // generate a random delay [1-400]ms
+                      int delay = ThreadLocalRandom.current().nextInt(1, 401);
+                      // ask a messenger to deliver the message
+
+                     // esta a dar excecao porque??
+                     // ControlChannelListener.sendMessage(outmsg, delay);
+                  }
+              }
+          }
+
+          String[] newInfo = infoList.stream().toArray(String[]::new);
+
+          outputStream.writeObject(newInfo);
+
+          //System.out.println(Arrays.toString(newInfo));
+
+
+      }
+      catch(Exception e){
+          System.out.println("ControlChannelListener for REMOVED > updateLocalChunkCount: " +e);
+      }
+
+
+
+  }
+
+  public void deleteChunkFile(String fileId, String chunkNo){ //delete um ficheiro .chk
+
+      try{
+          String fileName = fileId + "-" + chunkNo;
+          String filePath = "chunks/" + fileName + ".chk";
+          File chunk = new File(filePath);
+
+          if(chunk.exists()){
+              chunk.delete();
+          }
+
+      }
+      catch(Exception e){
+          System.out.println("ControlChannelListener > deleteChunkFile: " +e);
+      }
+
+  }
+
+  public byte[] getChunkBody(String fileId, String chunkNo){
+      byte[] ret = null;
+
+      try{
+          String fileName = fileId + "-" + chunkNo;
+          String filePath = "chunks/" + fileName + ".chk";
+          File chunk = new File(filePath);
+
+          if(chunk.exists()){
+              ret = Files.readAllBytes(Paths.get(filePath));
+          }
+
+      }
+      catch(Exception e){
+          System.out.println("ControlChannelListener > deleteChunkFile: " +e);
+      }
+      return ret;
+  }
 
 
 

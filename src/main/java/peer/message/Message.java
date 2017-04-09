@@ -3,6 +3,10 @@ package peer.message;
 import peer.*;
 import javax.xml.bind.DatatypeConverter;
 
+import java.io.*;
+import java.util.*;/*
+import java.nio.file.*;*/
+
 /**
 * A message to be sent. Made of an header and a body.
 */
@@ -84,6 +88,11 @@ public class Message {
             case "DELETE":
             {
                 message = new DeleteMessage("1.0", "1", "A1B2C3");
+                break;
+            }
+            case "REMOVED":
+            {
+                message = new RemovedMessage("1.0", "1", "A1B2C3", "24");
                 break;
             }
             default:
@@ -208,5 +217,30 @@ public class Message {
       return length;
     }
 
+    public static void addChunkInfoToFile(String sender, String file, String chunk, String desiredRep, String actualRep){
 
+        try{//ler info que ja la esta
+        ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
+        String[] currentInfo = (String[])inputStream.readObject();
+
+//System.out.println("de currentInfo.txt: "+Arrays.toString(currentInfo));
+
+        //adicionar info
+        ArrayList<String> currentInfoList = new ArrayList<String>(Arrays.asList(currentInfo));
+        String newInfo = sender+"-"+file+"-"+chunk+"-"+desiredRep+"-"+actualRep;
+        currentInfoList.add(newInfo);
+
+
+        //voltar a guardar no ficheiro
+        currentInfo = currentInfoList.toArray(new String[currentInfoList.size()]);
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
+        outputStream.writeObject(currentInfo);
+
+//System.out.println("para currentInfo.txt: "+Arrays.toString(currentInfo));
+    }
+    catch(Exception e){
+        System.out.println("Message > addChunkInfoToFile: " +e);
+    }
+
+    }
 }
