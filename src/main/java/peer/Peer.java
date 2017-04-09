@@ -45,7 +45,7 @@ public class Peer {
     public static void main(String[] args) {
 
         if (args.length < 6) {
-          System.out.println("syntax: Peer <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT>");
+          System.out.println("syntax: <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT>");
           return;
         }
 

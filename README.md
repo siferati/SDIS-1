@@ -10,16 +10,16 @@
 ### Using ``gradle``
 
 * Open a terminal in ``SDIS-1`` directory
-* Type ``./gradlew run`` to start listening
+* Type ``./gradlew run -Pa=<MC_addr>:<MC_port>,<MDB_addr>:<MDB_port>,<MDR_addr>:<MDR_port>,<PROTO_VERSION>,<SERVER_ID>,<ACCESS_POINT>`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
-* Type ``./gradlew run -Pa=<CH>,<MSG>`` to send a message to chosen channel
+* Type ``./gradlew run -Pa=<MC_addr>:<MC_port>,<MDB_addr>:<MDB_port>,<MDR_addr>:<MDR_port>,<PROTO_VERSION>,<SERVER_ID>,<ACCESS_POINT>,<CH>,<MSG>`` to send a message to chosen channel
 
 ### Using ``-jar``
 
 * Open a terminal in ``SDIS-1`` directory
-* Type ``java -jar build/libs/SDIS-1.jar`` to start listening
+* Type ``java -jar build/libs/SDIS-1.jar <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT>`` to start listening
 * Open a new terminal in ``SDIS-1`` directory
-* Type ``java -jar build/libs/SDIS-1.jar <CH> <MSG>`` to send a message to chosen channel
+* Type ``java -jar build/libs/SDIS-1.jar <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT> <CH> <MSG>`` to send a message to chosen channel
 
 ### Arguments
 
@@ -33,8 +33,28 @@
   * ``PUTCHUNK``
 
 
-* ``<EXIT>`` Exit
-  * ``exit`` Call with only this argument to close all listeners
+* ``<MC_addr>:<MC_port>``
+  * 230.0.0.1:8081
+
+
+* ``<MDB_addr>:<MDB_port>``
+  * 230.0.0.2:8082
+
+
+* ``<MDR_addr>:<MDR_port>``
+  * 230.0.0.3:8083
+
+
+* ``<PROTO_VERSION>``
+  * 1.0
+
+
+* ``<SERVER_ID>``
+  * ``Int`` **Different number for each terminal!**
+
+
+* ``<ACCESS_POINT>``
+  * ola
 
 ## How to clean
 
