@@ -31,6 +31,9 @@ public class Peer {
             closeAll();
         }
         else if (args.length == 2) {
+            // needed to test repdeg
+            new Thread(new ControlChannelListener()).start();
+
             sendMessage(args[0], args[1]);
         }
     }

@@ -44,7 +44,7 @@ public class ChannelMessenger implements Runnable {
     this.channelPort = channelPort;
     this.channelAddress = channelAddress;
     this.bufferSize = bufferSize;
-    this.message = message; /*TODO HERE */
+    this.message = message;
     this.delay = delay;
 
 

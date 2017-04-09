@@ -35,91 +35,100 @@ public class ControlChannelListener extends ChannelListener {
     super(CHANNEL_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE);
   }
 
+
+  /**
+  * Searches {@link #waitingConfirmation} to see if the received STORED message is a match
+  *
+  * @param received Message to search
+  *
+  * @return Index of found match. -1 otherwise
+  */
+  private int searchWaitingConfirmation(Message received) {
+
+    for (int i = 0; i < waitingConfirmation.size(); i++) {
+
+      PutChunkMessage msg = waitingConfirmation.get(i);
+
+      if (msg.getFileId().equals(received.getFileId()) && msg.getChunkNo().equals(received.getChunkNo())) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   @Override
   protected void handler(Message received) {
 
-     switch (received.getType()) {
+    switch (received.getType()) {
 
-       case "STORED":
-       {
-         synchronized (waitingConfirmation) {
+      case "STORED":
 
-           int i;
+        synchronized (waitingConfirmation) {
 
-           // check if this peer is interested in this store
-           if ((i = waitingConfirmation.indexOf(received)) > 0) {
+          int i;
 
-             PutChunkMessage msg = waitingConfirmation.get(i);
+          // check if this peer is interested in this store
+          if ((i = searchWaitingConfirmation(received)) >= 0) {
 
-             // add sender to history
-             if (msg.addSaver(received.getSenderId())) {
+            PutChunkMessage msg = waitingConfirmation.get(i);
 
-               // add one to rep deg
-               msg.addActualRepDeg();
-             }
 
-             // if time window for stored is over
-             if (!msg.getWaiting()) {
+            // add sender to history
+            if (msg.addSaver(received.getSenderId())) {
 
-               // if rep deg was achieved
-               if (msg.getActualRepDeg() > Integer.parseInt(msg.getRepDeg())) {
+              // add one to rep deg
+              msg.addActualRepDeg();
+            }
 
-                 // remove this message from the "queue"
-              waitingConfirmation.remove(i);
-               }
-               else {
+            // if time window for stored is over
+            if (!msg.getWaiting()) {
+              // check if repDeg was achieved and act accordingly
+              msg.checkRepDeg();
+            }
+          }
+        }
 
-                 // send message again, this time doubling the time window
-                 if (!msg.resend()) {
+        break;
 
-                   // if max attempts to resend were achieved
-                   // remove this message from the "queue"
-                   waitingConfirmation.remove(i);
-                 }
-               }
-             }
-           }
-         }
+      case "DELETE":{
 
-         break;
-     }
-         case "DELETE":{
+          try{
 
-             try{
+              File dir = new File("testing/");
 
-                 File dir = new File("testing/");
-
-                 File[] matches = dir.listFiles(new FilenameFilter()
-                 {
-                     public boolean accept(File dir, String name)
-                     {
-                         return name.startsWith(received.getFileId()) && name.endsWith(".txt");
-                     }
-                 });
+              File[] matches = dir.listFiles(new FilenameFilter()
+              {
+                public boolean accept(File dir, String name)
+                {
+                   return name.startsWith(received.getFileId()) && name.endsWith(".txt");
+                }
+              });
 
                  for(int i = 0; i < matches.length; i++)
-                 {
-                     matches[i].delete();
-                 }
+                  {
+                      matches[i].delete();
+                  }
+
+                      removeFromPeerChunks(matches);
 
                  removeFromPeerChunks(matches);
 
-             }
-             catch(Exception e){
-                 System.out.println("ControlChannelListener for CHUNK: " +e);
-             }
-             break;
+          }
+          catch(Exception e){
+              System.out.println("ControlChannelListener for CHUNK: " +e);
+          }
+          break;
 
-         }
-
-         case "REMOVED":{
+      }
+     case "REMOVED":{
 
              updateLocalChunkCount(received.getFileId());
 
          }
 
-         default:
-         break;
+     default:
+     break;
      }
 }
 

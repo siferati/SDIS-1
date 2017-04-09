@@ -2,6 +2,7 @@ package peer.channel;
 
 import peer.*;
 import peer.message.*;
+import peer.file.*;
 
 import java.io.*;
 import java.net.*;
@@ -48,6 +49,9 @@ public class BackupChannelListener extends ChannelListener {
 
         // ask a messenger to deliver the message
         ControlChannelListener.sendMessage(outmsg, delay);
+
+        // store this chunk
+        new FileManager().store(received);
 
         break;
         }

@@ -2,6 +2,7 @@ package peer.message;
 
 import peer.*;
 import javax.xml.bind.DatatypeConverter;
+import java.util.Arrays;
 
 import java.io.*;
 import java.util.*;/*
@@ -19,7 +20,7 @@ public class Message {
     public static final int CHUNK_SIZE = 64000;
 
     /** Header of this message */
-    private MessageHeader header;
+    protected MessageHeader header;
 
     /** Body of this message (file chunk as bytes) */
     private byte[] body;
@@ -37,7 +38,7 @@ public class Message {
         this.body = body;
     }
 
-    /** TODO fix parser
+    /**
     * Parses a message (byte[]) and returns the correspondent Message object
     *
     * @param msg Message to parse
@@ -48,11 +49,16 @@ public class Message {
 
         // init
         byte[] header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
+
+        // byte[] -> string -> length + 2* CRLF.length
+        int header_length = new String(msg).split(MessageHeader.CRLF)[0].length() + 2 * MessageHeader.CRLF.length();
+
+        // init
         byte[] body = new byte[CHUNK_SIZE];
 
         // split array into header and body
-        System.arraycopy(msg, 0, header, 0, header.length);
-        System.arraycopy(msg, header.length, body, 0, body.length);
+        System.arraycopy(msg, 0, header, 0, header_length);
+        System.arraycopy(msg, header_length, body, 0, body.length);
 
         // split the header to get each individual field
         // .trim() removes null bytes from empty space in byte[]
@@ -117,14 +123,8 @@ public class Message {
     */
     public byte[] toBytes() {
 
-      // init header
-      byte[] b_header = new byte[Peer.BUFFER_SIZE - CHUNK_SIZE];
-
       // get header bytes
-      byte[] b_header_aux = header.toString().getBytes();
-
-      // turn header bytes into fixed size byte[]
-      System.arraycopy(b_header_aux, 0, b_header, 0, b_header_aux.length);
+      byte[] b_header = header.toString().getBytes();
 
       // init output
       byte[] output = new byte[Peer.BUFFER_SIZE];
@@ -204,17 +204,39 @@ public class Message {
     /**
     * Getter
     *
-    * @return Body byte[] length
+    * @return {@link #body}
+    */
+    public byte[] getBody() {
+        return body;
+    }
+
+    /**
+    * Returns the filepath to store/load this chunk
+    *
+    * @return Filepath to store/load this chunk
+    */
+    public String getChunkPath() {
+
+        return "chunks/" + header.fileId + "-" + header.chunkNo + ".chk";
+    }
+
+    /**
+    * Getter
+    *
+    * @return Length of body (byte[])
     */
     public int getBodyLength() {
 
-      int length = 0;
-      for (byte b: body) {
-        if (b != 0) {
-          length++;
+      int i;
+      for (i = body.length - 1; i > 0; i--) {
+        if (body[i] != 0 || body[i - 1] != 0) {
+          break;
         }
       }
-      return length;
+      if (i < 0 || i == body.length - 1) {
+        i++;
+      }
+      return i;
     }
 
     public static void addChunkInfoToFile(String sender, String file, String chunk, String desiredRep, String actualRep){
