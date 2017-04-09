@@ -72,7 +72,7 @@ public class Peer {
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("TEST_INFO_UPDATE")) {
-                  Message.addChunkInfoToFile("1", "1", "Affw2C3", "24", "5");
+                  new FileManager().addChunkInfoToFile("1", "1", "Affw2C3", "24", "5");
                  // ControlChannelListener.sendMessage(message, 0);
               }
             break;

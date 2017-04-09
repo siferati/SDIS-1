@@ -238,31 +238,4 @@ public class Message {
       }
       return i;
     }
-
-    public static void addChunkInfoToFile(String sender, String file, String chunk, String desiredRep, String actualRep){
-
-        try{//ler info que ja la esta
-        ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
-        String[] currentInfo = (String[])inputStream.readObject();
-
-//System.out.println("de currentInfo.txt: "+Arrays.toString(currentInfo));
-
-        //adicionar info
-        ArrayList<String> currentInfoList = new ArrayList<String>(Arrays.asList(currentInfo));
-        String newInfo = sender+"-"+file+"-"+chunk+"-"+desiredRep+"-"+actualRep;
-        currentInfoList.add(newInfo);
-
-
-        //voltar a guardar no ficheiro
-        currentInfo = currentInfoList.toArray(new String[currentInfoList.size()]);
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
-        outputStream.writeObject(currentInfo);
-
-//System.out.println("para currentInfo.txt: "+Arrays.toString(currentInfo));
-    }
-    catch(Exception e){
-        System.out.println("Message > addChunkInfoToFile: " +e);
-    }
-
-    }
 }

@@ -1,6 +1,7 @@
 package peer.message;
 
 import peer.channel.*;
+import peer.file.*;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -120,7 +121,7 @@ public class PutChunkMessage extends Message {
           System.out.println(header.chunkNo + ": RepDeg was achieved, removing message from waiting queue!");
 
           // remove this message from the "queue"
-          ControlChannelListener.waitingConfirmation.remove(this);
+          removeFromQueue();
           }
         else {
 
@@ -131,7 +132,7 @@ public class PutChunkMessage extends Message {
 
             // if max attempts to resend were achieved
             // remove this message from the "queue"
-            ControlChannelListener.waitingConfirmation.remove(this);
+            removeFromQueue();
           }
         }
 
@@ -139,6 +140,24 @@ public class PutChunkMessage extends Message {
           System.out.println("Queue is empty!");
         }
       }
+    }
+  }
+
+  /**
+  * Removes this message from the waiting queue
+  * and adds an entry to the log
+  */
+  private void removeFromQueue() {
+
+    // this shouldn't be needed, but just in case
+    synchronized (ControlChannelListener.waitingConfirmation) {
+
+      // remove this message from the "queue"
+      ControlChannelListener.waitingConfirmation.remove(this);
+
+      // add this chunk to log
+      new FileManager().addChunkInfoToFile(header.senderId, header.fileId, header.chunkNo, header.repDeg, Integer.toString(actualRepDeg));
+
     }
   }
 
