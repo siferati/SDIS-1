@@ -2,6 +2,8 @@ package peer.file;
 
 import peer.channel.*;
 import peer.message.*;
+import peer.*;
+
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
@@ -115,8 +117,9 @@ public class FileManager {
   * and asking other peers to store them
   *
   * @param filepath Path to the file to backup
+  * @param repDeg {@link message.MessageHeader#repDeg}
   */
-  public void backup(String filepath) {
+  public void backup(String filepath, String repDeg) {
 
     File file = new File(filepath);
 
@@ -143,7 +146,7 @@ public class FileManager {
         // TODO make sure this is correct. read was leaving last bytes with garbage?
         System.arraycopy(chunk, 0, body, 0, nread);
 
-        PutChunkMessage msg = new PutChunkMessage(fileId, Integer.toString(chunkNo), "1", body);
+        PutChunkMessage msg = new PutChunkMessage(fileId, Integer.toString(chunkNo), repDeg, body);
 
         // add this message to waiting "queue"
         synchronized (ControlChannelListener.waitingConfirmation) {
@@ -162,7 +165,7 @@ public class FileManager {
       if (filesize % Message.CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        PutChunkMessage lastmsg = new PutChunkMessage(fileId, Integer.toString(chunkNo), "1", new byte[0]);
+        PutChunkMessage lastmsg = new PutChunkMessage(fileId, Integer.toString(chunkNo), repDeg, new byte[0]);
 
         // send message
         lastmsg.send();
@@ -177,7 +180,7 @@ public class FileManager {
 
   }
 
-  /** TODO create subfolder with server id as its name and store chunks in it
+  /**
   * Stores the chunk cointained in the msg
   *
   * @param msg Message containing the chunk to store
@@ -197,7 +200,7 @@ public class FileManager {
       out.close();
     }
     catch (Exception e) {
-      System.out.println("FileManager: Error storing chunk " + filepath);
+      System.out.println("FileManager: Error storing chunk " + filepath + ": " + e);
     }
   }
 

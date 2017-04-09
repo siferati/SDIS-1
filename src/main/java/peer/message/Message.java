@@ -246,7 +246,7 @@ public class Message {
     */
     public String getChunkPath() {
 
-        return "chunks/" + header.fileId + "-" + header.chunkNo + ".chk";
+        return Peer.CHUNKS_PATH + header.fileId + "-" + header.chunkNo + ".chk";
     }
 
     /**

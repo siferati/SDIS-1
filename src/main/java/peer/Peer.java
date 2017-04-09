@@ -37,6 +37,9 @@ public class Peer {
     /** Access point */
     public static String ACCESS_POINT;
 
+    /** Path where chunks are stored */
+    public static String CHUNKS_PATH;
+
     /**
     * Entry point of the program
     *
@@ -75,6 +78,12 @@ public class Peer {
         // access point
         ACCESS_POINT = args[5];
 
+        // chunk path
+        CHUNKS_PATH = "chunks/peer" + ID + "/";
+
+        // create needed folders
+        File dir = new File(Peer.CHUNKS_PATH);
+        dir.mkdirs();
 
         if (args.length == 6) {
             new Thread(new ControlChannelListener()).start();
@@ -116,7 +125,7 @@ public class Peer {
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {
-                backup("testing/file.txt");
+                backup("testing/file.txt", "" + 1);
             }
             break;
             case "MDR":
@@ -138,7 +147,7 @@ public class Peer {
     /**
     * @see FileManager#backup
     */
-    public static void backup(String filepath) {
-        new FileManager().backup(filepath);
+    public static void backup(String filepath, String repDeg) {
+        new FileManager().backup(filepath, repDeg);
     }
 }
