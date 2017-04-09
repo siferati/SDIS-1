@@ -22,9 +22,9 @@ public class BackupChannelListener extends ChannelListener {
   /** {@link ChannelMessenger#messengerName} */
   public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
   /** {@link ChannelListener#channelPort} */
-  public static final int CHANNEL_PORT = 8082;
+  public static final int CHANNEL_PORT = Peer.MDB_PORT;
   /** {@link ChannelListener#channelAddress} */
-  public static final String CHANNEL_ADDRESS = "230.0.0.2";
+  public static final String CHANNEL_ADDRESS = Peer.MDB_ADDRESS;
   /** {@link ChannelListener#bufferSize} */
   public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
 
@@ -42,7 +42,7 @@ public class BackupChannelListener extends ChannelListener {
     switch (received.getType()) {
 
       case "PUTCHUNK":{
-        StoredMessage outmsg = new StoredMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo());
+        StoredMessage outmsg = new StoredMessage(received.getFileId(), received.getChunkNo());
 
         // generate a random delay [1-400]ms
         int delay = ThreadLocalRandom.current().nextInt(1, 401);

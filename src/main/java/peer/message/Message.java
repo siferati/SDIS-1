@@ -32,9 +32,9 @@ public class Message {
     *
     * @param body Body of this message (file chunk as bytes)
     */
-    public Message(String type, String version, String senderId, String fileId, String chunkNo, String repDeg, byte[] body) {
+    public Message(String type, String fileId, String chunkNo, String repDeg, byte[] body) {
 
-        this.header = new MessageHeader(type, version, senderId, fileId, chunkNo, repDeg);
+        this.header = new MessageHeader(type, fileId, chunkNo, repDeg);
         this.body = body;
     }
 
@@ -72,33 +72,44 @@ public class Message {
 
             case "PUTCHUNK":
             {
-                message = new PutChunkMessage(contents[1], contents[2], contents[3], contents[4], contents[5], body);
-
+                message = new PutChunkMessage(contents[3], contents[4], contents[5], body);
+                message.setVersion(contents[1]);
+                message.setSenderId(contents[2]);
                 break;
             }
             case "STORED":
             {
-                message = new StoredMessage(contents[1], contents[2], contents[3], contents[4]);
+                message = new StoredMessage(contents[3], contents[4]);
+                message.setVersion(contents[1]);
+                message.setSenderId(contents[2]);
                 break;
             }
             case "GETCHUNK":
             {
-                message = new GetChunkMessage(contents[1], contents[2], contents[3], contents[4]);
+                message = new GetChunkMessage(contents[3], contents[4]);
+                message.setVersion(contents[1]);
+                message.setSenderId(contents[2]);
                 break;
             }
             case "CHUNK":
             {
-                message = new ChunkMessage("1.0", "1", "A1B2C3", "24","fake".getBytes());
+                message = new ChunkMessage("A1B2C3", "24","fake".getBytes());
+                message.setVersion("1.0");
+                message.setSenderId("1");
                 break;
             }
             case "DELETE":
             {
-                message = new DeleteMessage("1.0", "1", "A1B2C3");
+                message = new DeleteMessage("A1B2C3");
+                message.setVersion("1.0");
+                message.setSenderId("1");
                 break;
             }
             case "REMOVED":
             {
-                message = new RemovedMessage("1.0", "1", "A1B2C3", "24");
+                message = new RemovedMessage("A1B2C3", "24");
+                message.setVersion("1.0");
+                message.setSenderId("1");
                 break;
             }
             default:
@@ -136,6 +147,24 @@ public class Message {
       System.arraycopy(body, 0, output, b_header.length, body.length);
 
       return output;
+    }
+
+    /**
+    * Setter
+    *
+    * @param senderId {@link MessageHeader#senderId}
+    */
+    public void setSenderId(String senderId) {
+      this.header.senderId = senderId;
+    }
+
+    /**
+    * Setter
+    *
+    * @param version {@link MessageHeader#version}
+    */
+    public void setVersion(String version) {
+      this.header.version = version;
     }
 
     /**

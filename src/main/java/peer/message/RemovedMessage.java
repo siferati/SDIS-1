@@ -13,7 +13,7 @@ public class RemovedMessage extends Message {
   *
   * @see Message#Message
   */
-  public RemovedMessage(String version, String senderId, String fileId, String chunkNo) {
-    super(TYPE, version, senderId, fileId, chunkNo, "", new byte[0]);
+  public RemovedMessage(String fileId, String chunkNo) {
+    super(TYPE, fileId, chunkNo, "", new byte[0]);
   }
 }

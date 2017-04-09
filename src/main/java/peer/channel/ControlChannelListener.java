@@ -20,9 +20,9 @@ public class ControlChannelListener extends ChannelListener {
   /** {@link ChannelMessenger#messengerName} */
   public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
   /** {@link ChannelListener#channelPort} */
-  public static final int CHANNEL_PORT = 8081;
+  public static final int CHANNEL_PORT = Peer.MC_PORT;
   /** {@link ChannelListener#channelAddress} */
-  public static final String CHANNEL_ADDRESS = "230.0.0.1";
+  public static final String CHANNEL_ADDRESS = Peer.MC_ADDRESS;
   /** {@link ChannelListener#bufferSize} */
   public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
   /** A synchronized arraylist holding messages waiting for STORED confirmation */
@@ -223,7 +223,10 @@ public class ControlChannelListener extends ChannelListener {
                     byte[] body = getChunkBody(fileID, infoChunkNo);
 
                       //send PUTCHUNK
-                      PutChunkMessage outmsg = new PutChunkMessage("1.0", tmpInfo[0], tmpInfo[1], tmpInfo[2], tmpInfo[3], body);
+                      PutChunkMessage outmsg = new PutChunkMessage(tmpInfo[1], tmpInfo[2], tmpInfo[3], body);
+
+                      // change id to match original sender, not this peer
+                      outmsg.setSenderId(tmpInfo[0]);
 
                       // generate a random delay [1-400]ms
                       int delay = ThreadLocalRandom.current().nextInt(1, 401);

@@ -20,9 +20,9 @@ public class RestoreChannelListener extends ChannelListener {
     /** {@link ChannelMessenger#messengerName} */
     public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
     /** {@link ChannelListener#channelPort} */
-    public static final int CHANNEL_PORT = 8083;
+    public static final int CHANNEL_PORT = Peer.MDR_PORT;
     /** {@link ChannelListener#channelAddress} */
-    public static final String CHANNEL_ADDRESS = "230.0.0.3";
+    public static final String CHANNEL_ADDRESS = Peer.MDR_ADDRESS;
     /** {@link ChannelListener#bufferSize} */
     public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
 
@@ -42,7 +42,7 @@ public class RestoreChannelListener extends ChannelListener {
         switch (received.getType()) {
             case "GETCHUNK": //iniciator peer manda msg getchunk para MC
             {
-                GetChunkMessage outmsg = new GetChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), String.valueOf(received.getChunkNo()));
+                GetChunkMessage outmsg = new GetChunkMessage(received.getFileId(), String.valueOf(received.getChunkNo()));
 
                 // ask a messenger to deliver the message
                 ControlChannelListener.sendMessage(outmsg, delay);
@@ -68,7 +68,7 @@ System.out.println("index: " + chunkIndex);
 
                                 byte[] body = Files.readAllBytes(Paths.get(filePath));
 
-                                ChunkMessage outmsg = new ChunkMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo(), body);
+                                ChunkMessage outmsg = new ChunkMessage(received.getFileId(), received.getChunkNo(), body);
 
                                 // generate a random delay [1-400]ms
                                 delay = ThreadLocalRandom.current().nextInt(1, 401);

@@ -1,5 +1,7 @@
 package peer.message;
 
+import peer.*;
+
 /**
 * Header for a Message.
 *
@@ -29,17 +31,15 @@ public class MessageHeader {
   * Constructor
   *
   * @param type {@link #type}
-  * @param version {@link #version}
-  * @param senderId {@link #senderId}
   * @param fileId {@link #fileId}
   * @param chunkNo {@link #chunkNo}
   * @param repDeg {@link #repDeg}
   */
-  public MessageHeader(String type, String version, String senderId, String fileId, String chunkNo, String repDeg) {
+  public MessageHeader(String type, String fileId, String chunkNo, String repDeg) {
 
     this.type = type;
-    this.version = version;
-    this.senderId = senderId;
+    this.version = Peer.VERSION;
+    this.senderId = Peer.ID;
     this.fileId = fileId;
     this.chunkNo = chunkNo;
     this.repDeg = repDeg;

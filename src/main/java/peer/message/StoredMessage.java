@@ -13,7 +13,7 @@ public class StoredMessage extends Message {
   *
   * @see Message#Message
   */
-  public StoredMessage(String version, String senderId, String fileId, String chunkNo) {
-    super(TYPE, version, senderId, fileId, chunkNo, "", new byte[0]);
+  public StoredMessage(String fileId, String chunkNo) {
+    super(TYPE, fileId, chunkNo, "", new byte[0]);
   }
 }

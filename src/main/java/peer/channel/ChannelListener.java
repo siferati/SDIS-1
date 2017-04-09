@@ -1,6 +1,7 @@
 package peer.channel;
 
 import peer.message.*;
+import peer.*;
 
 import java.io.*;
 import java.net.*;
@@ -89,11 +90,15 @@ public abstract class ChannelListener implements Runnable {
       // parse message
       Message inmsg = Message.parser(received);
 
-      // display message
-      System.out.println(channelName + ": " + inmsg.getHeader().print() + " -> " + inmsg.getBodyLength() + " bytes");
-      
-      // give message to subclasses
-      handler(inmsg);
+      // ignore if message belongs to this peer
+      if (!inmsg.getSenderId().equals(Peer.ID)) {
+
+        // display message
+        System.out.println(channelName + ": " + inmsg.getHeader().print() + " -> " + inmsg.getBodyLength() + " bytes");
+
+        // give message to subclasses
+        handler(inmsg);
+      }
   }
 
   @Override

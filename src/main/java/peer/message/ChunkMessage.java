@@ -16,8 +16,8 @@ public class ChunkMessage extends Message {
   *
   * @see Message#Message
   */
-  public ChunkMessage(String version, String senderId, String fileId, String chunkNo, byte[] body) {
+  public ChunkMessage(String fileId, String chunkNo, byte[] body) {
 
-      super(TYPE, version, senderId, fileId, chunkNo, "", body);
+      super(TYPE, fileId, chunkNo, "", body);
   }
 }
