@@ -20,9 +20,9 @@ public class RestoreChannelListener extends ChannelListener {
     /** {@link ChannelMessenger#messengerName} */
     public static final String MESSENGER_NAME = CHANNEL_NAME + " Messenger";
     /** {@link ChannelListener#channelPort} */
-    public static final int CHANNEL_PORT = 8083;
+    public static final int CHANNEL_PORT = Peer.MDR_PORT;
     /** {@link ChannelListener#channelAddress} */
-    public static final String CHANNEL_ADDRESS = "230.0.0.3";
+    public static final String CHANNEL_ADDRESS = Peer.MDR_ADDRESS;
     /** {@link ChannelListener#bufferSize} */
     public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
 
