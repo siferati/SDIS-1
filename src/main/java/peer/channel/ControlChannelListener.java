@@ -223,7 +223,10 @@ public class ControlChannelListener extends ChannelListener {
                     byte[] body = getChunkBody(fileID, infoChunkNo);
 
                       //send PUTCHUNK
-                      PutChunkMessage outmsg = new PutChunkMessage("1.0", tmpInfo[0], tmpInfo[1], tmpInfo[2], tmpInfo[3], body);
+                      PutChunkMessage outmsg = new PutChunkMessage(tmpInfo[1], tmpInfo[2], tmpInfo[3], body);
+
+                      // change id to match original sender, not this peer
+                      outmsg.setSenderId(tmpInfo[0]);
 
                       // generate a random delay [1-400]ms
                       int delay = ThreadLocalRandom.current().nextInt(1, 401);

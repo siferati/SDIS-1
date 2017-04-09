@@ -42,7 +42,7 @@ public class BackupChannelListener extends ChannelListener {
     switch (received.getType()) {
 
       case "PUTCHUNK":{
-        StoredMessage outmsg = new StoredMessage(received.getVersion(), received.getSenderId(), received.getFileId(), received.getChunkNo());
+        StoredMessage outmsg = new StoredMessage(received.getFileId(), received.getChunkNo());
 
         // generate a random delay [1-400]ms
         int delay = ThreadLocalRandom.current().nextInt(1, 401);

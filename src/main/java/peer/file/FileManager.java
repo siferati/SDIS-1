@@ -143,7 +143,7 @@ public class FileManager {
         // TODO make sure this is correct. read was leaving last bytes with garbage?
         System.arraycopy(chunk, 0, body, 0, nread);
 
-        PutChunkMessage msg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", body);
+        PutChunkMessage msg = new PutChunkMessage(fileId, Integer.toString(chunkNo), "1", body);
 
         // add this message to waiting "queue"
         synchronized (ControlChannelListener.waitingConfirmation) {
@@ -162,7 +162,7 @@ public class FileManager {
       if (filesize % Message.CHUNK_SIZE == 0) {
 
         // get message to send to multicast channel
-        PutChunkMessage lastmsg = new PutChunkMessage("1.0", "1", fileId, Integer.toString(chunkNo), "1", new byte[0]);
+        PutChunkMessage lastmsg = new PutChunkMessage(fileId, Integer.toString(chunkNo), "1", new byte[0]);
 
         // send message
         lastmsg.send();

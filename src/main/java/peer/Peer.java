@@ -102,15 +102,15 @@ public class Peer {
             case "MC":
               // ControlChannelListener.sendMessage(msg, 0);
               if (msg.equals("DELETE")) {
-                  DeleteMessage message = new DeleteMessage(VERSION, ID, "A1B2C3");
+                  DeleteMessage message = new DeleteMessage("A1B2C3");
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("REMOVED")) {
-                  RemovedMessage message = new RemovedMessage(VERSION, ID, "A1B2C3", "24");
+                  RemovedMessage message = new RemovedMessage("A1B2C3", "24");
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("TEST_INFO_UPDATE")) {
-                  new FileManager().addChunkInfoToFile(ID, "1", "Affw2C3", "24", "5");
+                  new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
                  // ControlChannelListener.sendMessage(message, 0);
               }
             break;
@@ -121,11 +121,11 @@ public class Peer {
             break;
             case "MDR":
             if (msg.equals("GETCHUNK")){
-                GetChunkMessage message = new GetChunkMessage(VERSION, ID, "A1B2C3", "0");
+                GetChunkMessage message = new GetChunkMessage("A1B2C3", "0");
                 RestoreChannelListener.sendMessage(message);
             }
             else if (msg.equals("CHUNK")){
-              ChunkMessage message = new ChunkMessage(VERSION, ID, "A1B2C3", "0", "faky".getBytes());
+              ChunkMessage message = new ChunkMessage("A1B2C3", "0", "faky".getBytes());
               RestoreChannelListener.sendMessage(message);
             }
 
