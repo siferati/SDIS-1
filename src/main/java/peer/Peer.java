@@ -120,7 +120,7 @@ public class Peer {
               }
               if (msg.equals("GETCHUNK")){
                   GetChunkMessage message = new GetChunkMessage("A1B2C3", "0");
-                  RestoreChannelListener.sendMessage(message);
+                  ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("TEST_INFO_UPDATE")) {
                   new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
@@ -133,7 +133,7 @@ public class Peer {
             }
             break;
             case "MDR":
-            else if (msg.equals("CHUNK")){
+            if (msg.equals("CHUNK")){
               ChunkMessage message = new ChunkMessage("A1B2C3", "0", "faky".getBytes());
               RestoreChannelListener.sendMessage(message);
             }
@@ -149,5 +149,23 @@ public class Peer {
     */
     public static void backup(String filepath, String repDeg) {
         new FileManager().backup(filepath, repDeg);
+    }
+
+    public static void deleteFile(String filepath) {
+
+        String fileID = new FileManager().getFileId(filepath);
+
+        DeleteMessage message = new DeleteMessage(fileID);
+
+        ControlChannelListener.sendMessage(message, 0);
+
+        //nao e preciso mandar uma mensagem para cada chunk, porque ao receber delete ja elimina todos os chunks do ficheiro
+        // mas em caso de o delete nao chegar la podemos mandar varias vezes?
+/*
+        ControlChannelListener.sendMessage(message, 0);
+        ControlChannelListener.sendMessage(message, 0);
+        ControlChannelListener.sendMessage(message, 0);
+        ControlChannelListener.sendMessage(message, 0);
+*/
     }
 }

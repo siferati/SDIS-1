@@ -46,7 +46,6 @@ public class RestoreChannelListener extends ChannelListener {
                 try{
                         String fileName = received.getFileId() + "-" + received.getChunkNo();
                         int chunkIndex = getChunkIndex(fileName);
-System.out.println("index: " + chunkIndex);
 
                         if(chunkIndex > -1){
                             //chunk presente no peer. ir buscar body:

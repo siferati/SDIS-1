@@ -59,11 +59,11 @@ public class ControlChannelListener extends ChannelListener {
 
   @Override
   protected void handler(Message received) {
+System.out.println("RECEIVED: " + received.getType());
 
     switch (received.getType()) {
 
-      case "STORED":
-
+     case "STORED":{
         synchronized (waitingConfirmation) {
 
           int i;
@@ -86,12 +86,14 @@ public class ControlChannelListener extends ChannelListener {
               // check if repDeg was achieved and act accordingly
               msg.checkRepDeg();
             }
-          }
+        }
+        }
+        break;
+        }
 
+     case "GETCHUNK":{ //iniciator peer manda msg getchunk para MC
 
-        break;}
-        case "GETCHUNK": //iniciator peer manda msg getchunk para MC
-        {
+            int delay = 0;
             GetChunkMessage outmsg = new GetChunkMessage(received.getFileId(), String.valueOf(received.getChunkNo()));
 
             // ask a messenger to deliver the message
@@ -99,7 +101,8 @@ public class ControlChannelListener extends ChannelListener {
 
             break;
         }
-      case "DELETE":{
+
+     case "DELETE":{
 
           try{
 
@@ -129,6 +132,7 @@ public class ControlChannelListener extends ChannelListener {
           break;
 
       }
+
      case "REMOVED":{
 
              updateLocalChunkCount(received.getFileId());
