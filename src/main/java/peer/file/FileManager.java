@@ -180,6 +180,33 @@ public class FileManager {
 
   }
 
+
+  /** TODO criar send() em todos os tipos de mensagem!
+  * Restores a file by asking for all of its chunks
+  *
+  * @param filepath File to restore
+  */
+  public void restore(String filepath) {
+
+    File file = new File(filepath);
+
+    long filesize = file.length();
+
+    String fileId = getFileId(filepath);
+
+    int nchunks = (int) Math.ceil(file.length() / (double)Message.CHUNK_SIZE);
+
+    System.out.println("debug nchunks: " + nchunks);
+
+    for (int i = 0; i < nchunks; i++) {
+
+      // ask for the chunk
+      GetChunkMessage msg = new GetChunkMessage(fileId, Integer.toString(i));
+      ControlChannelListener.sendMessage(msg, 0);
+    }
+  }
+
+
   /**
   * Stores the chunk cointained in the msg
   *

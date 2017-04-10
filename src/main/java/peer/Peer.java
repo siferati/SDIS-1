@@ -129,7 +129,9 @@ public class Peer {
             break;
             case "MDB":
             if (msg.equals("PUTCHUNK")) {
-                backup("testing/file.txt", "" + 1);
+                backup("testing/longfile.txt", "" + 1);
+            } else if (msg.equals("RESTORE")) {
+              restore("testing/longfile.txt");
             }
             break;
             case "MDR":
@@ -145,11 +147,12 @@ public class Peer {
     }
 
     /**
-    * @see FileManager#backup
+    * @see file.FileManager#backup
     */
     public static void backup(String filepath, String repDeg) {
         new FileManager().backup(filepath, repDeg);
     }
+
 
     public static void deleteFile(String filepath) {
 
@@ -168,4 +171,11 @@ public class Peer {
         ControlChannelListener.sendMessage(message, 0);
 */
     }
+
+  /**
+  * @see {@link file.FileManager#restore}
+  */
+  public static void restore(String filepath) {
+    new FileManager().restore(filepath);
+  }
 }

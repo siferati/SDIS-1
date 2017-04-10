@@ -91,7 +91,7 @@ System.out.println("RECEIVED: " + received.getType());
         break;
         }
 
-     case "GETCHUNK":{ //iniciator peer manda msg getchunk para MC
+     case "GETCHUNK":{ //TODO iniciator peer manda msg getchunk para MC
 
             int delay = 0;
             GetChunkMessage outmsg = new GetChunkMessage(received.getFileId(), String.valueOf(received.getChunkNo()));

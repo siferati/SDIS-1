@@ -25,6 +25,8 @@ public class RestoreChannelListener extends ChannelListener {
     public static final String CHANNEL_ADDRESS = Peer.MDR_ADDRESS;
     /** {@link ChannelListener#bufferSize} */
     public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
+    /** A synchronized arraylist holding messages waiting for CHUNK reply */
+    public static ArrayList<ChunkMessage> waitingConfirmation = new ArrayList<ChunkMessage>(Collections.synchronizedList(new ArrayList<ChunkMessage>()));
 
     /**
     * Constructor
@@ -33,7 +35,30 @@ public class RestoreChannelListener extends ChannelListener {
         super(CHANNEL_NAME, CHANNEL_PORT, CHANNEL_ADDRESS, BUFFER_SIZE);
     }
 
-    @Override
+
+    /**
+    * Searches {@link #waitingConfirmation} to see if the received CHUNK message is a match
+    *
+    * @param received Message to search
+    *
+    * @return Index of found match. -1 otherwise
+    */
+    private int searchWaitingConfirmation(Message received) {
+
+      for (int i = 0; i < waitingConfirmation.size(); i++) {
+
+        ChunkMessage msg = waitingConfirmation.get(i);
+
+        if (msg.getFileId().equals(received.getFileId()) && msg.getChunkNo().equals(received.getChunkNo())) {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+
+
+    @Override //TODO aqui
     protected void handler(Message received) {
 
         int delay = 0;
