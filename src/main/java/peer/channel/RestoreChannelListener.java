@@ -108,6 +108,13 @@ public class RestoreChannelListener extends ChannelListener {
 
                   // if this is the next chunk
                   if (Integer.parseInt(received.getChunkNo()) == currentChunk + 1) {
+
+                    // if this is the last chunk
+                    if (received.getBodyLength() < Message.CHUNK_SIZE) {
+                      currentChunk = -1;
+                      receivedChunks.clear();
+                    }
+
                     // append to file
                     new FileManager().build(received);
                   }
@@ -117,6 +124,12 @@ public class RestoreChannelListener extends ChannelListener {
                     Message nextChunk = searchReceivedChunks();
 
                     if (nextChunk != null) {
+
+                      // if this is the last chunk
+                      if (nextChunk.getBodyLength() < Message.CHUNK_SIZE) {
+                        currentChunk = -1;
+                        receivedChunks.clear();
+                      }
 
                       // append to file
                       new FileManager().build(nextChunk);
