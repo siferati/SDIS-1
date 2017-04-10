@@ -1,5 +1,20 @@
 # SDIS Project 1 - Distributed Backup Service
 
+# Client
+
+## How to build
+
+* Open a terminal in ``SDIS-1/Client`` directory
+* Type ``javac Client.java``
+
+## How to run
+
+* Open a terminal in ``SDIS-1/Client`` directory
+* Type ``java Client <ADDRESS>:<PORT> <SUB_PROTOCOL> <OPND_1> <OPND_2>``
+
+
+# Peer
+
 ## How to build
 
 * Open a terminal in ``SDIS-1`` directory
@@ -10,28 +25,15 @@
 ### Using ``gradle``
 
 * Open a terminal in ``SDIS-1`` directory
-* Type ``./gradlew run -Pa=<MC_addr>:<MC_port>,<MDB_addr>:<MDB_port>,<MDR_addr>:<MDR_port>,<PROTO_VERSION>,<SERVER_ID>,<ACCESS_POINT>`` to start listening
-* Open a new terminal in ``SDIS-1`` directory
-* Type ``./gradlew run -Pa=<MC_addr>:<MC_port>,<MDB_addr>:<MDB_port>,<MDR_addr>:<MDR_port>,<PROTO_VERSION>,<SERVER_ID>,<ACCESS_POINT>,<CH>,<MSG>`` to send a message to chosen channel
+* Type ``./gradlew run -Pa=<MC_addr>:<MC_port>,<MDB_addr>:<MDB_port>,<MDR_addr>:<MDR_port>,<PROTO_VERSION>,<SERVER_ID>,<ACCESS_POINT>``
+
 
 ### Using ``-jar``
 
 * Open a terminal in ``SDIS-1`` directory
-* Type ``java -jar build/libs/SDIS-1.jar <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT>`` to start listening
-* Open a new terminal in ``SDIS-1`` directory
-* Type ``java -jar build/libs/SDIS-1.jar <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT> <CH> <MSG>`` to send a message to chosen channel
+* Type ``java -jar build/libs/SDIS-1.jar <MC_addr>:<MC_port> <MDB_addr>:<MDB_port> <MDR_addr>:<MDR_port> <PROTO_VERSION> <SERVER_ID> <ACCESS_POINT>``
 
 ### Arguments
-
-* ``<CH>`` Multicast Channel
-  * ``MC`` Main Channel
-  * ``MDB`` Data Backup Channel
-  * ``MDR`` Data Restore Channel
-
-
-* ``<MSG>`` Message
-  * ``PUTCHUNK``
-
 
 * ``<MC_addr>:<MC_port>``
   * 230.0.0.1:8081
@@ -54,7 +56,7 @@
 
 
 * ``<ACCESS_POINT>``
-  * ola
+  * localhost:8080
 
 ## How to clean
 
