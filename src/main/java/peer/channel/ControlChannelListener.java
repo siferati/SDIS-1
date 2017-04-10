@@ -351,29 +351,45 @@ System.out.println("RECEIVED: " + received.getType());
       int chunkIndex = -1;
 
       try{
+        /*
           //cena falsa para por chunks para poder ler
           String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
           ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
           outputStream.writeObject(chunks);
           //fim da cena falsa
-
+        */
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
+
           String[] chunksNosInThisPeer = (String[])inputStream.readObject();
+System.out.println("chunk index string []: " + Arrays.toString(chunksNosInThisPeer));
 
           //procurar chunkNo nos chunkNos deste peer
           List<String> chunkList = Arrays.asList(chunksNosInThisPeer);
 
-          String noTxt = fileName.replace(".txt", "");
-          chunkIndex = chunkList.indexOf(noTxt);
+          String[] fileNameSeparated = fileName.split("-");
+          String fileId = fileNameSeparated[0];
+          String chunkNo = fileNameSeparated[1];
 
+          for (int i = 0;i < chunkList.size() ; i++ ) {
+            String [] chunkInfo = chunkList.get(i).split("-");
+            String thisFileId = chunkInfo[1];
+            String thisChunkNo = chunkInfo[2];
+
+            if(thisFileId == fileId){
+              if(thisChunkNo == chunkNo){
+                chunkIndex = i;
+                break;
+              }
+            }
+          }
 
       }
       catch(Exception e){
-          System.out.println("RestoreChannelListener > getChunkIndex: " +e);
+          System.out.println("ControlChannelListener > getChunkIndex: " + e);
       }
-
+System.out.println("chunk index: " + chunkIndex);
       return chunkIndex;
   }
 

@@ -270,7 +270,7 @@ public class FileManager {
     try {
 
       //ler info que ja la esta
-      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
+      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
       String[] currentInfo = (String[])inputStream.readObject();
 
       //System.out.println("de currentInfo.txt: "+Arrays.toString(currentInfo));
@@ -282,7 +282,7 @@ public class FileManager {
 
       //voltar a guardar no ficheiro
       currentInfo = currentInfoList.toArray(new String[currentInfoList.size()]);
-      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
+      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
       outputStream.writeObject(currentInfo);
 
       //System.out.println("para currentInfo.txt: "+Arrays.toString(currentInfo));
@@ -290,7 +290,7 @@ public class FileManager {
       inputStream.close();
     }
     catch(Exception e) {
-        System.out.println("Message > addChunkInfoToFile: " + e);
+        System.out.println("FileManager > addChunkInfoToFile: " + e);
     }
   }
 
@@ -300,10 +300,10 @@ public class FileManager {
 
 
     try{
-      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkMap.info"));
+      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH + "/chunkMap.info"));
 
 
-      File dir = new File("testing/");
+      File dir = new File(Peer.CHUNKS_PATH);
 
       File[] matches = dir.listFiles(new FilenameFilter()
       {
@@ -335,11 +335,11 @@ public class FileManager {
     String[] currentMaps = null;
 
     try{
-      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkMap.info"));
+      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/chunkMap.info"));
 
       currentMaps = (String[])inputStream.readObject();
       //  System.out.println(Arrays.toString(currentInfo));
-      
+
     }
     catch(Exception e){
       System.out.println("FileManager > readMaps: " +e);
