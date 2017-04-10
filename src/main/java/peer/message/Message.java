@@ -73,43 +73,37 @@ public class Message {
             case "PUTCHUNK":
             {
                 message = new PutChunkMessage(contents[3], contents[4], contents[5], body);
-                message.setVersion(contents[1]);
-                message.setSenderId(contents[2]);
+
                 break;
             }
             case "STORED":
             {
                 message = new StoredMessage(contents[3], contents[4]);
-                message.setVersion(contents[1]);
-                message.setSenderId(contents[2]);
+
                 break;
             }
             case "GETCHUNK":
             {
                 message = new GetChunkMessage(contents[3], contents[4]);
-                message.setVersion(contents[1]);
-                message.setSenderId(contents[2]);
+
                 break;
             }
             case "CHUNK":
             {
-                message = new ChunkMessage("A1B2C3", "24","fake".getBytes());
-                message.setVersion("1.0");
-                message.setSenderId("1");
+                message = new ChunkMessage(contents[3],contents[4],body);
+
                 break;
             }
             case "DELETE":
             {
-                message = new DeleteMessage("A1B2C3");
-                message.setVersion("1.0");
-                message.setSenderId("1");
+                message = new DeleteMessage(contents[3]);
+
                 break;
             }
             case "REMOVED":
             {
-                message = new RemovedMessage("A1B2C3", "24");
-                message.setVersion("1.0");
-                message.setSenderId("1");
+                message = new RemovedMessage(contents[3], contents[4]);
+              
                 break;
             }
             default:
@@ -117,9 +111,13 @@ public class Message {
                 message = null;
             }
             break;
-        }
+          }
 
-        return message;
+          if (message != null){
+            message.setVersion(contents[1]);
+            message.setSenderId(contents[2]);
+          }
+          return message;
     }
 
     @Override

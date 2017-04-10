@@ -94,6 +94,8 @@ public class Peer {
 
             // needed to test repdeg
             new Thread(new ControlChannelListener()).start();
+            new Thread(new BackupChannelListener()).start();
+            new Thread(new RestoreChannelListener()).start();
 
             sendMessage(args[6], args[7]);
         }
@@ -119,7 +121,7 @@ public class Peer {
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("GETCHUNK")){
-                  GetChunkMessage message = new GetChunkMessage("A1B2C3", "0");
+                  GetChunkMessage message = new GetChunkMessage("A1B2C3", "2");
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("TEST_INFO_UPDATE")) {

@@ -155,7 +155,7 @@ public class PutChunkMessage extends Message {
       // remove this message from the "queue"
       ControlChannelListener.waitingConfirmation.remove(this);
 
-      // add this chunk to log
+      // add this chunk to log TODO chamar no backup
       new FileManager().addChunkInfoToFile(header.senderId, header.fileId, header.chunkNo, header.repDeg, Integer.toString(actualRepDeg));
 
     }
