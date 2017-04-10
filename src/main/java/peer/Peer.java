@@ -126,7 +126,7 @@ public class Peer {
               }
               if (msg.equals("TEST_INFO_UPDATE")) {
                 //  new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
-                new FileManager().mapChunksToIds();
+                new FileManager().writeMaps();
                  // ControlChannelListener.sendMessage(message, 0);
               }
             break;

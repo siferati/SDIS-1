@@ -242,7 +242,7 @@ public class FileManager {
     }
   }
 
-  public void mapChunksToIds(){
+  public void writeMaps(){
 
     List<String> chunkMapList = new LinkedList<String>();
 
@@ -269,20 +269,9 @@ public class FileManager {
       String[] chunkMapArray = chunkMapList.stream().toArray(String[]::new);
       outputStream.writeObject(chunkMapArray);
 
-
-
-
-
-
-      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkMap.info"));
-      String[] currentInfo = (String[])inputStream.readObject();
-      //  System.out.println(Arrays.toString(currentInfo));
-
-
-
     }
     catch(Exception e){
-      System.out.println("ControlChannelListener for CHUNK: " +e);
+      System.out.println("FileManager > writeMaps: " +e);
     }
 
 
@@ -291,19 +280,20 @@ public class FileManager {
 
   public String[] readMaps () {
 
+    String[] currentMaps = null;
+
     try{
-      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkMap.info"));
+      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkMap.info"));
 
-      String[] currentMaps = (String[])inputStream.readObject();
+      currentMaps = (String[])inputStream.readObject();
       //  System.out.println(Arrays.toString(currentInfo));
-
-      return currentMaps;
-
+      
     }
     catch(Exception e){
-      System.out.println("ControlChannelListener for CHUNK: " +e);
+      System.out.println("FileManager > readMaps: " +e);
     }
 
+    return currentMaps;
 
   }
 
