@@ -62,7 +62,7 @@ public class ClientListener implements Runnable {
             break;
 
           case "RESTORE":
-            //Peer.restore(args[1]);
+            Peer.restore(args[1]);
             break;
 
           case "RECLAIM":
