@@ -135,7 +135,7 @@ System.out.println("RECEIVED: " + received.getType());
 
           try{
 
-              File dir = new File(CHUNKS_PATH);
+              File dir = new File(Peer.CHUNKS_PATH);
 
               File[] matches = dir.listFiles(new FilenameFilter()
               {
@@ -189,13 +189,13 @@ System.out.println("RECEIVED: " + received.getType());
         /*
           //cena falsa para por chunks para poder ler
           String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
-          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
           outputStream.writeObject(chunks);
           //fim da cena falsa
           */
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(CHUNKS_PATH + "/currentInfo.info"));
+
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
           String[] chunksNosInThisPeer = (String[])inputStream.readObject();
 
           //procurar chunkNo nos chunkNos deste peer
@@ -211,6 +211,7 @@ System.out.println("RECEIVED: " + received.getType());
 
           // Integer[] newChunks = chunkList.toArray(new Arrays[chunkList.size()]);
 
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH +"/currentInfo.info"));
           String[] newChunks = chunkList.stream().toArray(String[]::new);
 
           outputStream.writeObject(newChunks);
@@ -235,7 +236,7 @@ System.out.println("RECEIVED: " + received.getType());
           */
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.info"));
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
           String[] currentInfo = (String[])inputStream.readObject();
 
           List<String> infoList = new LinkedList<String>(Arrays.asList(currentInfo));
@@ -282,6 +283,8 @@ System.out.println("RECEIVED: " + received.getType());
                   }
               }
           }
+
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH +"/currentInfo.info"));
 
           String[] newInfo = infoList.stream().toArray(String[]::new);
 
