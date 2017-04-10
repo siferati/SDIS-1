@@ -2,6 +2,7 @@ package peer.channel;
 
 import peer.*;
 import peer.message.*;
+import peer.file.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -25,8 +26,15 @@ public class RestoreChannelListener extends ChannelListener {
     public static final String CHANNEL_ADDRESS = Peer.MDR_ADDRESS;
     /** {@link ChannelListener#bufferSize} */
     public static final int BUFFER_SIZE = Peer.BUFFER_SIZE;
+
     /** A synchronized arraylist holding messages waiting for CHUNK reply */
-    public static ArrayList<ChunkMessage> waitingConfirmation = new ArrayList<ChunkMessage>(Collections.synchronizedList(new ArrayList<ChunkMessage>()));
+    public static ArrayList<GetChunkMessage> waitingConfirmation = new ArrayList<GetChunkMessage>(Collections.synchronizedList(new ArrayList<GetChunkMessage>()));
+
+    /** last chunk that was written to the file */
+    private int currentChunk = -1;
+
+    /** list of chunks to write to file. */
+    private ArrayList<Message> receivedChunks = new ArrayList<Message>();
 
     /**
     * Constructor
@@ -47,7 +55,7 @@ public class RestoreChannelListener extends ChannelListener {
 
       for (int i = 0; i < waitingConfirmation.size(); i++) {
 
-        ChunkMessage msg = waitingConfirmation.get(i);
+        GetChunkMessage msg = waitingConfirmation.get(i);
 
         if (msg.getFileId().equals(received.getFileId()) && msg.getChunkNo().equals(received.getChunkNo())) {
           return i;
@@ -55,6 +63,19 @@ public class RestoreChannelListener extends ChannelListener {
       }
 
       return -1;
+    }
+
+
+    /**
+    * Looks for the next chunk to append to file
+    */
+    private Message searchReceivedChunks() {
+      for (Message msg : receivedChunks) {
+        if (Integer.parseInt(msg.getChunkNo()) == currentChunk - 1) {
+          return msg;
+        }
+      }
+      return null;
     }
 
 
@@ -67,8 +88,48 @@ public class RestoreChannelListener extends ChannelListener {
         switch (received.getType()) {
             case "CHUNK": //outros peers veem se tem um chunk e mandam para MDR
             {
+              synchronized (waitingConfirmation) {
 
-                break;
+                int i;
+
+                // check if this peer is interested in this chunk
+                if ((i = searchWaitingConfirmation(received)) >= 0) {
+
+                  GetChunkMessage msg = waitingConfirmation.get(i);
+
+                  // replied received
+                  msg.setReplied(true);
+
+                  // if time window for CHUNK is over
+                  if (!msg.getWaiting()) {
+                    // update queue
+                    msg.update();
+                  }
+
+                  // if this is the next chunk
+                  if (Integer.parseInt(received.getChunkNo()) == currentChunk + 1) {
+                    // append to file
+                    new FileManager().build(received);
+                  }
+                  else {
+
+                    // check if next chunk is already stored waiting
+                    Message nextChunk = searchReceivedChunks();
+
+                    if (nextChunk != null) {
+
+                      // append to file
+                      new FileManager().build(nextChunk);
+                    }
+                    else {
+
+                      // store chunk
+                      receivedChunks.add(received);
+                    }
+                  }
+              }
+              }
+              break;
             }
             default:
             break;

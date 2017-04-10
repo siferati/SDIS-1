@@ -91,7 +91,7 @@ System.out.println("RECEIVED: " + received.getType());
         break;
         }
 
-     case "GETCHUNK":{ //TODO iniciator peer manda msg getchunk para MC
+     case "GETCHUNK":{ // iniciator peer manda msg getchunk para MC
 
           int delay = 0;
 
@@ -102,9 +102,10 @@ System.out.println("RECEIVED: " + received.getType());
             if(chunkIndex > -1){
               //chunk presente no peer. ir buscar body:
 
-              String filePath = "chunks/" + fileName + ".chk";
+              String filePath = received.getChunkPath();
               File chunk = new File(filePath);
 
+              System.out.println(filePath);
 
               if(chunk.exists()){ //so para ter a certeza
 
@@ -345,13 +346,13 @@ System.out.println("RECEIVED: " + received.getType());
       try{
           //cena falsa para por chunks para poder ler
           String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
-          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
           outputStream.writeObject(chunks);
           //fim da cena falsa
 
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkList.txt"));
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
           String[] chunksNosInThisPeer = (String[])inputStream.readObject();
 
           //procurar chunkNo nos chunkNos deste peer

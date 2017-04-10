@@ -202,7 +202,32 @@ public class FileManager {
 
       // ask for the chunk
       GetChunkMessage msg = new GetChunkMessage(fileId, Integer.toString(i));
-      ControlChannelListener.sendMessage(msg, 0);
+
+      // add this message to waiting "queue"
+      synchronized (RestoreChannelListener.waitingConfirmation) {
+        RestoreChannelListener.waitingConfirmation.add(msg);
+      }
+
+      // send message to MC channel
+      msg.send();
+    }
+  }
+
+
+  /** TODO mapeamento fileId filepath hardcoded teste.txt
+  * Builds a file out of chunks
+  *
+  * @param msg Message cointaining the chunk
+  */
+  public void build(Message msg) {
+
+    try {
+      FileOutputStream output = new FileOutputStream("teste.txt", true);
+      output.write(msg.getBody());
+      output.close();
+    }
+    catch (Exception e) {
+      System.out.println("File Manager: Error building file: " + e);
     }
   }
 
