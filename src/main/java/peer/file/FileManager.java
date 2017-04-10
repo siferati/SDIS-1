@@ -293,4 +293,60 @@ public class FileManager {
         System.out.println("Message > addChunkInfoToFile: " + e);
     }
   }
+
+  public void writeMaps(){
+
+    List<String> chunkMapList = new LinkedList<String>();
+
+
+    try{
+      ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkMap.info"));
+
+
+      File dir = new File("testing/");
+
+      File[] matches = dir.listFiles(new FilenameFilter()
+      {
+        public boolean accept(File dir, String name)
+        {
+          return name.endsWith(".chk");
+        }
+      });
+
+      for(int i = 0; i < matches.length; i++){
+        String chunkName = matches[i].getName();
+        chunkMapList.add(chunkName);
+      }
+
+      String[] chunkMapArray = chunkMapList.stream().toArray(String[]::new);
+      outputStream.writeObject(chunkMapArray);
+
+    }
+    catch(Exception e){
+      System.out.println("FileManager > writeMaps: " +e);
+    }
+
+
+
+  }
+
+  public String[] readMaps () {
+
+    String[] currentMaps = null;
+
+    try{
+      ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkMap.info"));
+
+      currentMaps = (String[])inputStream.readObject();
+      //  System.out.println(Arrays.toString(currentInfo));
+      
+    }
+    catch(Exception e){
+      System.out.println("FileManager > readMaps: " +e);
+    }
+
+    return currentMaps;
+
+  }
+
 }

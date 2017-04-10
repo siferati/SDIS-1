@@ -136,13 +136,13 @@ System.out.println("RECEIVED: " + received.getType());
 
           try{
 
-              File dir = new File("testing/");
+              File dir = new File(Peer.CHUNKS_PATH);
 
               File[] matches = dir.listFiles(new FilenameFilter()
               {
                 public boolean accept(File dir, String name)
                 {
-                   return name.startsWith(received.getFileId()) && name.endsWith(".txt");
+                   return name.startsWith(received.getFileId()) && name.endsWith(".chk");
                 }
               });
 
@@ -187,14 +187,16 @@ System.out.println("RECEIVED: " + received.getType());
   public void removeFromPeerChunks(File[] chunkFiles){ // eliminar todas as ocurrencias de chunks com um certo fileid do ficheiro com info dos chunks guardados
 
       try{
+        /*
           //cena falsa para por chunks para poder ler
           String[] chunks = {"ER23R5-1","A1B2C3-24","A1B2C3-2","6THF76-143","KL999H-23","JUSNWW-2","YH65SD-4","LA89DH-8","7UUUYU-3"};
-          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/chunkList.txt"));
           outputStream.writeObject(chunks);
           //fim da cena falsa
+          */
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/chunkList.txt"));
+
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
           String[] chunksNosInThisPeer = (String[])inputStream.readObject();
 
           //procurar chunkNo nos chunkNos deste peer
@@ -204,12 +206,13 @@ System.out.println("RECEIVED: " + received.getType());
 
           for(int i = 0; i < chunkFiles.length; i++)
           {
-              String noTxt = chunkFiles[i].getName().replace(".txt", "");
-              chunkList.remove(noTxt);
+              String noExtension = chunkFiles[i].getName().replace(".chk", "");
+              chunkList.remove(noExtension);
           }
 
           // Integer[] newChunks = chunkList.toArray(new Arrays[chunkList.size()]);
 
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH +"/currentInfo.info"));
           String[] newChunks = chunkList.stream().toArray(String[]::new);
 
           outputStream.writeObject(newChunks);
@@ -225,14 +228,16 @@ System.out.println("RECEIVED: " + received.getType());
 
 
       try{
+        /*
           //cena falsa para por chunks para poder ler
           String[] senderId_fileId_chunkNo_intendedRepDeg_actualRepdeg = {"2-ER23R5-2-3-3","1-A1B2C3-24-2-2","1-A1B2C3--2-2-2","2-6THF76-43-1-1","4-KL999H-785-3-3","6-JUSNWW-245-2-2","5-YH65SD-1-4-3","5-LA89DH-23-1-1","2-7UUUYU-34-3-3"};
           ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("testing/currentInfo.txt"));
           outputStream.writeObject(senderId_fileId_chunkNo_intendedRepDeg_actualRepdeg);
           //fim da cena falsa
+          */
 
           //ler chunkIds do peer
-          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("testing/currentInfo.txt"));
+          ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Peer.CHUNKS_PATH + "/currentInfo.info"));
           String[] currentInfo = (String[])inputStream.readObject();
 
           List<String> infoList = new LinkedList<String>(Arrays.asList(currentInfo));
@@ -279,6 +284,8 @@ System.out.println("RECEIVED: " + received.getType());
                   }
               }
           }
+
+          ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Peer.CHUNKS_PATH +"/currentInfo.info"));
 
           String[] newInfo = infoList.stream().toArray(String[]::new);
 

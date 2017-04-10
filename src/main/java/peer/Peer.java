@@ -35,7 +35,10 @@ public class Peer {
     public static String ID;
 
     /** Access point */
-    public static String ACCESS_POINT;
+    public static String ACCESS_POINT_ADDRESS;
+
+    /** Access point */
+    public static String ACCESS_POINT_PORT;
 
     /** Path where chunks are stored */
     public static String CHUNKS_PATH;
@@ -76,7 +79,9 @@ public class Peer {
         ID = args[4];
 
         // access point
-        ACCESS_POINT = args[5];
+        String[] accesspoint = args[5].split(":");
+        ACCESS_POINT_ADDRESS = accesspoint[0];
+        ACCESS_POINT_PORT = accesspoint[1];
 
         // chunk path
         CHUNKS_PATH = "chunks/peer" + ID + "/";
@@ -89,7 +94,8 @@ public class Peer {
             new Thread(new ControlChannelListener()).start();
             new Thread(new BackupChannelListener()).start();
             new Thread(new RestoreChannelListener()).start();
-        }
+            new Thread(new ClientListener(ACCESS_POINT_ADDRESS, ACCESS_POINT_PORT)).start();
+        } //ignorar, isto e para testes
         else if (args.length == 8) {
 
             // needed to test repdeg
@@ -125,7 +131,8 @@ public class Peer {
                   ControlChannelListener.sendMessage(message, 0);
               }
               if (msg.equals("TEST_INFO_UPDATE")) {
-                  new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
+                //  new FileManager().addChunkInfoToFile(ID, "Affw2C3", "24", "5", "1");
+                new FileManager().writeMaps();
                  // ControlChannelListener.sendMessage(message, 0);
               }
             break;
